@@ -1,0 +1,18 @@
+.header-title {
+  color: $primary-color;
+  font-size: 58px;
+  font-family: "Fira Sans Extra Condensed";
+}
+
+.navbar {
+  background-color: $primary-color !important;
+}
+
+header {
+  background-color: $primary-color;
+}
+
+.active {
+  text-decoration: underline 1px;
+  text-underline-offset: 3px;
+}

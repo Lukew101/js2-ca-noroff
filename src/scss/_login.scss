@@ -1,0 +1,15 @@
+.login-form {
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+#loginButton {
+  background-color: $primary-color;
+  color: white;
+}
+
+#registerButton {
+  background-color: $secondary-color;
+  color: white;
+}
