@@ -13,3 +13,21 @@
   background-color: $secondary-color;
   color: white;
 }
+
+#loginButton:hover {
+  background-color: darken($primary-color, 10%);
+}
+
+#registerButton:hover {
+  background-color: darken($secondary-color, 10%);
+}
+
+.redirect-link {
+  color: lighten($primary-color, 20%);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.redirect-link:hover {
+  color: lighten($primary-color, 10%);
+}
