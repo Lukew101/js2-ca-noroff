@@ -18,12 +18,11 @@
             <input
               type="email"
               class="form-control"
-              id="floatingInput"
+              id="floatingEmail"
               placeholder=""
               required
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
             />
-            <label for="floatingInput">Email address</label>
+            <label for="floatingEmail">Email address</label>
           </div>
           <div class="form-floating">
             <input
@@ -35,25 +34,26 @@
               minlength="8"
             />
             <label for="floatingPassword">Password</label>
+            <div class="password-invalid-feedback"></div>
           </div>
-          <button type="submit" class="btn btn-custom w-100 mt-3" id="loginButton">
+          <button
+            type="submit"
+            class="btn btn-custom w-100 mt-3"
+            id="loginButton"
+          >
             Login
           </button>
-          <div
-            class="d-flex align-items-center border-bottom border-dark-subtle mx-4 my-3"
-          ></div>
-          <div class="d-flex flex-column align-items-center">
-            <button
-              type="button"
-              class="btn btn-custom w-50"
-              id="registerButton"
-            >
-              Register
-            </button>
-          </div>
         </form>
+        <div
+          class="d-flex align-items-center border-bottom border-dark-subtle mx-4 my-3"
+        ></div>
+        <div class="d-flex flex-column align-items-center">
+          <button type="button" class="btn btn-custom w-50" id="registerButton">
+            Register
+          </button>
+        </div>
       </section>
     </main>
-    <script src="/style.js"></script>
+    <script src="/style.js" type="module"></script>
   </body>
 </html>

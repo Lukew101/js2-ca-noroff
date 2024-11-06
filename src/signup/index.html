@@ -24,6 +24,7 @@
               required
             />
             <label for="floatingName">Name</label>
+            <div class="invalid-feedback">Name can only use a-Z, 0-9, and _ and must be &lt 20 characters</div>
           </div>
           <div class="form-floating mb-3">
             <input
@@ -34,8 +35,9 @@
               required
             />
             <label for="floatingEmail">Email address</label>
+            <div class="invalid-feedback">Please enter a valid Noroff email.</div>
           </div>
-          <div class="form-floating mb-3">
+          <div class="form-floating mb-4">
             <input
               type="password"
               class="form-control"
@@ -45,6 +47,7 @@
               minlength="8"
             />
             <label for="floatingPassword">Password</label>
+            <div class="invalid-feedback">Password must be at least 8 characters.</div>
           </div>
           <div class="form-floating">
             <input
@@ -56,6 +59,7 @@
               minlength="8"
             />
             <label for="floatingConfirmPassword">Confirm Password</label>
+            <div class="invalid-feedback">Passwords do not match.</div>
           </div>
           <div
             class="d-flex align-items-center border-bottom border-dark-subtle mx-4 my-3"
