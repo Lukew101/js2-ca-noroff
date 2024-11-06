@@ -5,7 +5,6 @@ const isUserLoggedIn = () => {
 
 const handleLoggedInUser = () => {
   const isLoggedIn = isUserLoggedIn();
-  console.log(isLoggedIn);
   if (isLoggedIn) {
     const navbar = document.querySelector(".navbar-nav");
     const signOut = document.createElement("a");
