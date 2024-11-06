@@ -1,4 +1,8 @@
-import validateFormData from "../signup/validateSignupForm.mjs";
+import { validateSignupFormData } from "../util/forms/formValidation.mjs";
+import login from "../util/forms/login.mjs";
+
+const API_AUTH_URL = "https://v2.api.noroff.dev/auth";
+const API_REGISTER_URL = `${API_AUTH_URL}/register`;
 
 const signupForm = document.querySelector("#signupForm");
 
@@ -10,13 +14,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const confirmPassword = document.querySelector("#floatingConfirmPassword").value;
 
     const isFormValid = signupForm.checkValidity();
-    const isCustomValidationValid = validateFormData(name, email, password, confirmPassword);
+    const isCustomValidationValid = validateSignupFormData(name, email, password, confirmPassword);
 
     if (!isFormValid || !isCustomValidationValid) {
       event.preventDefault(); 
     } else {
       const requestData = { name, email, password };
-      // registerUser(requestData);
+      registerUser(requestData);
       event.preventDefault(); 
     }
   });
@@ -24,7 +28,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 const registerUser = async (requestData) => {
   try {
-    const response = await fetch("", {
+    const { name, email, password } = requestData; 
+    const response = await fetch(API_REGISTER_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,11 +37,11 @@ const registerUser = async (requestData) => {
       body: JSON.stringify(requestData),
     });
     if (response.ok) {
-      console.log("User registered successfully");
-      signupForm.reset();
+      const loginRequestData = { email, password };
+      login(loginRequestData);
     } else {
       const errorData = await response.json();
-      console.log("Error:", errorData.message);
+      throw new Error(errorData.errors[0].message);
     }
   } catch (error) {
     console.error("Network error:", error);
