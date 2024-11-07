@@ -23,6 +23,8 @@ const getPosts = async () => {
   }
 };
 
+getPosts();
+
 const getPost = async (fetchURL) => {
   try {
     const response = await fetch(
@@ -96,4 +98,26 @@ document.querySelector(".form-select").addEventListener("change", (event) => {
   sortPosts(event.target.value);
 });
 
-getPosts();
+const searchInput = document.querySelector('.form-control[type="search"]');
+const feedSearchForm = document.querySelector('.feed-search-form');
+
+const filterPosts = (query) => {
+  const filteredPosts = posts.filter((post) => post.title.toLowerCase().includes(query.toLowerCase()));
+  displayPosts(filteredPosts);
+};
+
+feedSearchForm.addEventListener("submit", (event) => {
+  event.preventDefault(); 
+  const query = searchInput.value.trim();
+  if (query) {
+    filterPosts(query);
+  } else {
+    displayPosts(posts); 
+  }
+});
+
+searchInput.addEventListener("input", () => {
+  if (searchInput.value.trim() === "") {
+    displayPosts(posts);
+  }
+});
