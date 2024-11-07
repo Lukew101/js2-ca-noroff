@@ -6,3 +6,19 @@
 .post-box-shadow {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 6px 6px rgba(0, 0, 0, 0.1);
 }
+
+.comment-bubble {
+  background-color: #f0f0f0;      
+  color: #333;                    
+  padding: 10px 15px;
+  border-radius: 15px;
+  max-width: 80%;
+  display: inline-block;
+  margin-top: 5px;
+  word-break: break-word;
+}
+
+.comment-container {
+  max-height: 300px;
+  overflow-y: auto;
+}
