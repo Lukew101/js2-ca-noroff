@@ -2,6 +2,7 @@ import { createPostInnerHTML, createPostModalHTML } from "./post.mjs";
 
 let posts = [];
 
+// Fetches all posts
 const getPosts = async () => {
   try {
     const response = await fetch(
@@ -15,9 +16,9 @@ const getPosts = async () => {
     );
     if (response.ok) {
       const responseData = await response.json();
-      posts = responseData.data; 
+      posts = responseData.data;
       displayPosts(responseData.data);
-    } 
+    }
   } catch (error) {
     console.error("Network error:", error);
   }
@@ -25,27 +26,59 @@ const getPosts = async () => {
 
 getPosts();
 
+// Fetches a post with specified URL
 const getPost = async (fetchURL) => {
   try {
-    const response = await fetch(
-      fetchURL,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          "X-Noroff-API-Key": "51c023ca-d672-4f25-b71a-0c5e1489b5f9",
-        },
-      }
-    );
+    const response = await fetch(fetchURL, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "X-Noroff-API-Key": "51c023ca-d672-4f25-b71a-0c5e1489b5f9",
+      },
+    });
     if (response.ok) {
       const responseData = await response.json();
       const postWithComments = responseData.data;
       return postWithComments;
-    } 
+    }
   } catch (error) {
     console.error("Network error:", error);
   }
-}
+};
 
+// Creates a new post
+const createPostForm = document.querySelector("#createPostForm");
+
+createPostForm.addEventListener("submit", (event) => {
+  createPost(event);
+});
+
+const createPost = async (event) => {
+  event.preventDefault();
+  const title = document.querySelector("#postTitle").value;
+  const body = document.querySelector("#postContent").value;
+  const CREATE_POST_URL = "https://v2.api.noroff.dev/social/posts";
+
+  try {
+    const requestData = { title, body };
+    const response = await fetch(CREATE_POST_URL, {
+      method: "POST",
+      body: JSON.stringify(requestData),
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "X-Noroff-API-Key": "51c023ca-d672-4f25-b71a-0c5e1489b5f9",
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.ok) {
+      createPostForm.reset();
+      getPosts();
+    }
+  } catch (error) {
+    console.error("Network error:", error);
+  }
+};
+
+// Displays posts in the feed
 const displayPosts = (posts) => {
   const feedContainer = document.querySelector(".posts-feed");
   feedContainer.innerHTML = "";
@@ -62,27 +95,30 @@ const displayPosts = (posts) => {
         postComment.dataset.postId = post.id;
         const postId = event.currentTarget.dataset.postId;
         const POST_WITH_COMMENTS_URL = `https://v2.api.noroff.dev/social/posts/${postId}?_comments=true&_author=true`;
-        
+
         const postWithComments = await getPost(POST_WITH_COMMENTS_URL);
         const modalHTML = createPostModalHTML(postWithComments);
 
-        let existingModal = document.querySelector('#dynamicPostModal');
+        let existingModal = document.querySelector("#dynamicPostModal");
         if (existingModal) {
           existingModal.remove();
         }
         document.body.insertAdjacentHTML("beforeend", modalHTML);
-        const dynamicModal = new bootstrap.Modal(document.querySelector('#dynamicPostModal'));
+        const dynamicModal = new bootstrap.Modal(
+          document.querySelector("#dynamicPostModal")
+        );
         dynamicModal.show();
       });
     });
   });
 };
 
+// Sorts posts by the selected option
 const sortPosts = (sortBy) => {
   const sortedPosts = [...posts];
   switch (sortBy) {
     case "Most popular":
-       sortedPosts.sort((a, b) => b._count.reactions - a._count.reactions);
+      sortedPosts.sort((a, b) => b._count.reactions - a._count.reactions);
       break;
     case "Newest":
       sortedPosts.sort((a, b) => new Date(b.created) - new Date(a.created));
@@ -98,21 +134,24 @@ document.querySelector(".form-select").addEventListener("change", (event) => {
   sortPosts(event.target.value);
 });
 
+// Filters posts by the search query
 const searchInput = document.querySelector('.form-control[type="search"]');
-const feedSearchForm = document.querySelector('.feed-search-form');
+const feedSearchForm = document.querySelector(".feed-search-form");
 
 const filterPosts = (query) => {
-  const filteredPosts = posts.filter((post) => post.title.toLowerCase().includes(query.toLowerCase()));
+  const filteredPosts = posts.filter((post) =>
+    post.title.toLowerCase().includes(query.toLowerCase())
+  );
   displayPosts(filteredPosts);
 };
 
 feedSearchForm.addEventListener("submit", (event) => {
-  event.preventDefault(); 
+  event.preventDefault();
   const query = searchInput.value.trim();
   if (query) {
     filterPosts(query);
   } else {
-    displayPosts(posts); 
+    displayPosts(posts);
   }
 });
 
