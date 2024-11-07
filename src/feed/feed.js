@@ -1,5 +1,7 @@
 import { createPostInnerHTML, createPostModalHTML } from "./post.mjs";
 
+let posts = [];
+
 const getPosts = async () => {
   try {
     const response = await fetch(
@@ -13,7 +15,7 @@ const getPosts = async () => {
     );
     if (response.ok) {
       const responseData = await response.json();
-      console.log(responseData);
+      posts = responseData.data; 
       displayPosts(responseData.data);
     } 
   } catch (error) {
@@ -21,10 +23,10 @@ const getPosts = async () => {
   }
 };
 
-const getPost = async (postId) => {
+const getPost = async (fetchURL) => {
   try {
     const response = await fetch(
-      `https://v2.api.noroff.dev/social/posts/${postId}?_comments=true&_author=true`,
+      fetchURL,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -43,7 +45,9 @@ const getPost = async (postId) => {
 }
 
 const displayPosts = (posts) => {
-  const feedContainer = document.querySelector(".feed-container");
+  const feedContainer = document.querySelector(".posts-feed");
+  feedContainer.innerHTML = "";
+
   posts.forEach((post) => {
     const feedPost = document.createElement("div");
     feedPost.classList.add("feed-post", "card", "w-100");
@@ -55,7 +59,9 @@ const displayPosts = (posts) => {
       postComment.addEventListener("click", async (event) => {
         postComment.dataset.postId = post.id;
         const postId = event.currentTarget.dataset.postId;
-        const postWithComments = await getPost(postId);
+        const POST_WITH_COMMENTS_URL = `https://v2.api.noroff.dev/social/posts/${postId}?_comments=true&_author=true`;
+        
+        const postWithComments = await getPost(POST_WITH_COMMENTS_URL);
         const modalHTML = createPostModalHTML(postWithComments);
 
         let existingModal = document.querySelector('#dynamicPostModal');
@@ -69,5 +75,25 @@ const displayPosts = (posts) => {
     });
   });
 };
+
+const sortPosts = (sortBy) => {
+  const sortedPosts = [...posts];
+  switch (sortBy) {
+    case "Most popular":
+       sortedPosts.sort((a, b) => b._count.reactions - a._count.reactions);
+      break;
+    case "Newest":
+      sortedPosts.sort((a, b) => new Date(b.created) - new Date(a.created));
+      break;
+    case "Oldest":
+      sortedPosts.sort((a, b) => new Date(a.created) - new Date(b.created));
+      break;
+  }
+  displayPosts(sortedPosts);
+};
+
+document.querySelector(".form-select").addEventListener("change", (event) => {
+  sortPosts(event.target.value);
+});
 
 getPosts();
