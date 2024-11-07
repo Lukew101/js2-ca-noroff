@@ -121,7 +121,7 @@
           >
             <div class="card w-100 mb-4 feed-create-post">
               <div class="card-body">
-                <form>
+                <form id="createPostForm">
                   <div class="mb-3 d-flex align-items-center">
                     <img
                       src="../util/pictures/default-user.png"
@@ -130,22 +130,32 @@
                       height="40"
                       class="rounded-circle profile-pic bg-white border border-1 border-light me-1"
                     />
-                    <textarea
-                      class="form-control"
-                      id="postText"
-                      rows="2"
-                      placeholder="What's on your mind?"
-                    ></textarea>
+                    <div class="w-100 d-flex flex-column gap-2">
+                      <input
+                        type="text"
+                        class="form-control w-100"
+                        id="postTitle"
+                        placeholder="Give your post a title"
+                        required
+                      />
+                      <textarea
+                        class="form-control"
+                        id="postContent"
+                        rows="3"
+                        placeholder="What's on your mind?"
+                        required
+                      ></textarea>
+                    </div>
                   </div>
                   <div
                     class="d-flex align-items-center border-bottom border-dark-subtle mx-4 my-3"
                   ></div>
-                  <div class="d-flex justify-content-between">
+                  <div class="d-flex justify-content-between mx-4">
                     <div class="d-flex gap-3 create-post-icons">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
+                        width="20"
+                        height="20"
                         fill="currentColor"
                         class="bi bi-image-fill"
                         viewBox="0 0 16 16"
@@ -154,25 +164,10 @@
                           d="M.002 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-12a2 2 0 0 1-2-2zm1 9v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062zm5-6.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"
                         />
                       </svg>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        class="bi bi-emoji-smile"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
-                        />
-                        <path
-                          d="M4.285 9.567a.5.5 0 0 1 .683.183A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5m4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5"
-                        />
-                      </svg>
                     </div>
                     <button
                       type="submit"
-                      class="btn btn-custom"
+                      class="btn btn-custom btn-lg"
                       id="postButton"
                     >
                       Post
@@ -200,7 +195,9 @@
                 <option value="Oldest">Oldest</option>
               </select>
             </div>
-            <div class="d-flex flex-column align-items-center gap-3 w-100 posts-feed"></div>
+            <div
+              class="d-flex flex-column align-items-center gap-3 w-100 posts-feed"
+            ></div>
           </section>
         </div>
       </div>

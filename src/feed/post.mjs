@@ -27,6 +27,7 @@ const createPostInnerHTML = (element, post) => {
                       width="35"
                       height="35"
                       class="rounded-circle profile-pic bg-white border border-1 border-light"
+                      onerror="this.src='../util/pictures/default-user.png';"
                     />
                     <div class="d-flex flex-column">
                       <p class="mt-2 m-0 fw-bolder text-start trending-weave-text">
@@ -74,8 +75,8 @@ const createPostInnerHTML = (element, post) => {
                     </div>
                   </div>
                 </div>`;
-
-                return element;
+           
+  return element;
 };
 
 const createPostModalHTML = (post) => {
