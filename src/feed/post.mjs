@@ -1,3 +1,5 @@
+import { openEditForm } from "./updatePost.mjs";
+
 const postCreatedTime = (post) => {
   const createdDate = new Date(post.created);
   const currentTime = new Date();
@@ -13,38 +15,58 @@ const postCreatedTime = (post) => {
   }
 };
 
-const createPostInnerHTML = (element, post) => {
+const createPostInnerHTML = (element, post, isModal = false) => {
   const likes = post._count.reactions === 1 ? "like" : "likes";
   const comments = post._count.comments === 1 ? "comment" : "comments";
   const timePostedAgo = postCreatedTime(post);
 
+  const isAuthor =
+    post.author.email === JSON.parse(localStorage.getItem("profile")).email;
+
   element.innerHTML = `
                 <div class="card-body">
-                  <div class="d-flex align-items-center gap-2 mb-2">
-                    <img
-                      src="${post.author.avatar.url}"
-                      alt="${post.author.avatar.alt}"
-                      width="35"
-                      height="35"
-                      class="rounded-circle profile-pic bg-white border border-1 border-light"
-                      onerror="this.src='../util/pictures/default-user.png';"
-                    />
-                    <div class="d-flex flex-column">
-                      <p class="mt-2 m-0 fw-bolder text-start trending-weave-text">
-                        ${post.author.name}
-                      </p>
-                      <p class="m-0 post-posted-time text-start">
-                        ${timePostedAgo}
-                      </p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                      <img
+                        src="${post.author.avatar.url}"
+                        alt="${post.author.avatar.alt}"
+                        width="45"
+                        height="45"
+                        class="rounded-circle profile-pic bg-white border border-1 border-light"
+                        onerror="this.src='../util/pictures/default-user.png';"
+                      />
+                      <div class="d-flex flex-column">
+                        <p class="mt-2 m-0 fw-bolder text-start trending-weave-text">
+                          ${post.author.name}
+                        </p>
+                        <p class="m-0 post-posted-time text-start">
+                          ${timePostedAgo}
+                        </p>
+                      </div>
                     </div>
+                    ${
+                      isAuthor && !isModal
+                        ? `
+                        <div class="d-flex align-items-center gap-2 pointer edit-post">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                            <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
+                          </svg>
+                        </div>
+                      `
+                        : ""
+                    }
                   </div>
-                  <p class="card-title text-start my-4 fw-bolder fs-5">${post.title}</p>
+                  <p class="card-title text-start my-4 fw-bolder fs-5">${
+                    post.title
+                  }</p>
                   <p class="card-text text-start">
                     ${post.body}
                   </p>
                   <div class="d-flex small-grey-text justify-content-between">
                     <p class="m-0 pointer">${post._count.reactions} ${likes}</p>
-                    <p class="m-0 pointer post-comments">${post._count.comments} ${comments}</p>
+                    <p class="m-0 pointer post-comments">${
+                      post._count.comments
+                    } ${comments}</p>
                   </div>
                   <div
                     class="d-flex align-items-center border-bottom border-dark-subtle mx-3 my-2"
@@ -75,7 +97,12 @@ const createPostInnerHTML = (element, post) => {
                     </div>
                   </div>
                 </div>`;
-           
+
+  const editButton = element.querySelector(".edit-post");
+  if (editButton) {
+    editButton.addEventListener("click", () => openEditForm(post));
+  }
+
   return element;
 };
 
@@ -83,7 +110,7 @@ const createPostModalHTML = (post) => {
   const modalBody = document.createElement("div");
   modalBody.classList.add("modal-body", "p-4");
 
-  const originalPost = createPostInnerHTML(modalBody, post);
+  const originalPost = createPostInnerHTML(modalBody, post, true);
 
   const postComments = post.comments;
   const commentSection = document.createElement("div");
@@ -99,6 +126,7 @@ const createPostModalHTML = (post) => {
         width="35"
         height="35"
         class="rounded-circle profile-pic bg-white border border-1 border-light"
+        onerror="this.src='../util/pictures/default-user.png';"
       />
       <div class="d-flex flex-column">
         <p class="mt-2 m-0 fw-bolder text-start trending-weave-text">
@@ -113,9 +141,9 @@ const createPostModalHTML = (post) => {
       </p>`;
 
     commentSection.appendChild(commentElement);
-  })
+  });
 
-  return  `
+  return `
   <div class="modal fade" id="dynamicPostModal" tabindex="-1" aria-labelledby="dynamicPostModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
@@ -129,6 +157,6 @@ const createPostModalHTML = (post) => {
       </div>
     </div>
   </div>`;
-}
+};
 
 export { createPostInnerHTML, createPostModalHTML };
