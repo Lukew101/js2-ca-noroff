@@ -2,7 +2,7 @@ import login from "./src/util/forms/login.mjs";
 
 const loginForm = document.querySelector("#loginForm");
 
-const handleLoggedInUser = () => {
+const handleRedirectionIfLoggedIn = () => {
   const user = JSON.parse(localStorage.getItem("profile"));
   if (user) {
     window.location.href = "/src/feed";
@@ -32,4 +32,4 @@ document
     window.location.href = "/src/signup";
   });
 
-handleLoggedInUser();
+handleRedirectionIfLoggedIn();
