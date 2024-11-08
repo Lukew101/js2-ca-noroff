@@ -1,4 +1,5 @@
 import { getPosts } from "./fetchPosts.mjs";
+import { deletePost } from "./deletePost.mjs";
 
 const updatePost = async (postId, updatedPost) => {
   const UPDATE_POST_URL = `https://v2.api.noroff.dev/social/posts/${postId}`;
@@ -40,7 +41,10 @@ const createEditPostModalHTML = (post) => {
                   <label for="editPostContent" class="form-label">Content</label>
                   <textarea class="form-control" id="editPostContent" rows="3">${post.body}</textarea>
                 </div>
-                <button type="submit" class="btn btn-custom btn-lg" id="postButton">Save Changes</button>
+                <div class="d-flex justify-content-between">
+                  <button type="submit" class="btn btn-custom btn-lg" id="postButton">Save Changes</button>
+                  <button type="button" class="btn btn-danger btn-lg" id="deleteButton">Delete</button>
+                </div>          
               </form>
             </div>
           </div>
@@ -59,6 +63,11 @@ const openEditForm = (post) => {
     document.querySelector("#editPostModal")
   );
   editModal.show();
+
+  const deleteButton = document.querySelector("#deleteButton");
+  if (deleteButton) {
+    deleteButton.addEventListener("click", () => deletePost(post.id, editModal));
+  }
 
   document
     .querySelector("#editPostForm")
