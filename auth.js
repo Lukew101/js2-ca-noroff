@@ -2,6 +2,13 @@ import login from "./src/util/forms/login.mjs";
 
 const loginForm = document.querySelector("#loginForm");
 
+const handleLoggedInUser = () => {
+  const user = JSON.parse(localStorage.getItem("profile"));
+  if (user) {
+    window.location.href = "/src/feed";
+  }
+};
+
 document.addEventListener("DOMContentLoaded", function () {
   loginForm.addEventListener("submit", function (event) {
     const email = document.querySelector("#floatingEmail").value.trim();
@@ -24,3 +31,5 @@ document
   .addEventListener("click", function () {
     window.location.href = "/src/signup";
   });
+
+handleLoggedInUser();
