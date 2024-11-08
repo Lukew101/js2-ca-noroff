@@ -24,7 +24,7 @@ const updatePost = async (postId, updatedPost) => {
 const createEditPostModalHTML = (post) => {
   return `
       <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="editPostModalLabel">Edit Post</h5>
@@ -38,7 +38,7 @@ const createEditPostModalHTML = (post) => {
                 </div>
                 <div class="mb-3">
                   <label for="editPostContent" class="form-label">Content</label>
-                  <textarea class="form-control" id="editPostContent">${post.body}</textarea>
+                  <textarea class="form-control" id="editPostContent" rows="3">${post.body}</textarea>
                 </div>
                 <button type="submit" class="btn btn-custom btn-lg" id="postButton">Save Changes</button>
               </form>
