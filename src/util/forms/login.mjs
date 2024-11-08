@@ -19,7 +19,7 @@ const login = async (requestData) => {
       const { accessToken, ...profile } = responseData.data;
       saveToLocalStorage("accessToken", accessToken);
       saveToLocalStorage("profile", JSON.stringify(profile));
-      window.location.href = "/src/profile/";
+      window.location.href = "/src/feed/";
     } else {
       const errorData = await response.json();
       const errorMessageElement = document.querySelector(".password-invalid-feedback");
