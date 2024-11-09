@@ -15,10 +15,7 @@ const validateName = (name) => {
 const validateEmail = (email) => {
   const emailPattern = /^[a-z0-9._%+-]+@(noroff\.no|stud\.noroff\.no)$/i;
 
-  if (email === "") {
-    setValidationState("#floatingEmail", false);
-    return false;
-  } else if (!emailPattern.test(email)) {
+  if (email === "" || !emailPattern.test(email)) {
     setValidationState("#floatingEmail", false);
     return false;
   } else {
@@ -28,10 +25,7 @@ const validateEmail = (email) => {
 };
 
 const validatePassword = (password) => {
-  if (password === "") {
-    setValidationState("#floatingPassword", false);
-    return false;
-  } else if (password.length < 8) {
+  if (password === "" || password.length < 8) {
     setValidationState("#floatingPassword", false);
     return false;
   } else {
@@ -41,10 +35,7 @@ const validatePassword = (password) => {
 };
 
 const validateConfirmPassword = (password, confirmPassword) => {
-  if (confirmPassword === "") {
-    setValidationState("#floatingConfirmPassword", false);
-    return false;
-  } else if (confirmPassword !== password) {
+  if (confirmPassword === "" || confirmPassword !== password) {
     setValidationState("#floatingConfirmPassword", false);
     return false;
   } else {
