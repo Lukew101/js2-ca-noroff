@@ -3,6 +3,9 @@ import { createPostsHTML } from "./createProfilePosts.mjs";
 const user = JSON.parse(localStorage.getItem("profile"));
 const FETCH_PROFILE_URL = `https://v2.api.noroff.dev/social/profiles/${user.name}?_following=true&_followers=true&`;
 
+const followersContainer = document.querySelector(".followers-container");
+const followingContainer = document.querySelector(".following-container");
+
 const fetchFullProfile = async () => {
   try {
     const response = await fetch(FETCH_PROFILE_URL, {
@@ -13,9 +16,10 @@ const fetchFullProfile = async () => {
     });
     if (response.ok) {
       const profile = await response.json();
-      console.log(profile.data);
       createProfileHTML(profile.data);
       createBioHTML(profile.data);
+      createFollowHTML(profile.data.followers, followersContainer);
+      createFollowHTML(profile.data.following, followingContainer);
       createPostsHTML();
       return profile.data;
     } else {
@@ -59,3 +63,28 @@ const createBioHTML = (profile) => {
                   </div>
   `;
 };
+
+const createFollowHTML = (people, followContainer) => {
+  followContainer.innerHTML = "";
+  if (people.length === 0) {
+    followContainer.innerHTML = "<p>No people to show.</p>";
+  }
+  people.forEach((person) => {
+    const followElement = document.createElement("div");
+    followElement.classList.add("d-flex", "gap-3", "align-items-center", "mb-2");
+    followElement.innerHTML = `
+                    <div class="d-flex flex-column pointer">
+                        <img
+                          src="${person.avatar.url}"
+                          alt="${person.avatar.alt}"
+                          width="65"
+                          height="60"
+                          class="rounded"
+
+                        />
+                        <p class="m-0 follow-name-font">${person.name}</p>
+                      </div>
+    `;
+    followContainer.appendChild(followElement);
+  });
+}
