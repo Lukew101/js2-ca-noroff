@@ -74,9 +74,11 @@ const sortPosts = (sortBy) => {
   displayPosts(sortedPosts);
 };
 
-document.querySelector(".form-select").addEventListener("change", (event) => {
-  sortPosts(event.target.value);
-});
+if (document.querySelector(".form-select")) {
+  document.querySelector(".form-select").addEventListener("change", (event) => {
+    sortPosts(event.target.value);
+  });
+}
 
 const searchInput = document.querySelector('.form-control[type="search"]');
 const feedSearchForm = document.querySelector(".feed-search-form");
@@ -88,20 +90,24 @@ const filterPosts = (query) => {
   displayPosts(filteredPosts);
 };
 
-feedSearchForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const query = searchInput.value.trim();
-  if (query) {
-    filterPosts(query);
-  } else {
-    displayPosts(posts);
-  }
-});
+if (feedSearchForm) {
+  feedSearchForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const query = searchInput.value.trim();
+    if (query) {
+      filterPosts(query);
+    } else {
+      displayPosts(posts);
+    }
+  });
+}
 
-searchInput.addEventListener("input", (event) => {
+if (feedSearchForm) {
+  searchInput.addEventListener("input", (event) => {
   if (searchInput.value.trim() === "") {
     sortPosts(event.target.value);
   }
 });
+}
 
 export { getPosts };
