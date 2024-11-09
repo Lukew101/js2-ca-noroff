@@ -1,4 +1,5 @@
 import { getPosts } from "./fetchPosts.mjs";
+import { createPostsHTML } from "../profile/createProfilePosts.mjs";
 
 const deletePost = async (postId, editModal) => {
   const CREATE_POST_URL = `https://v2.api.noroff.dev/social/posts/${postId}`;
@@ -12,7 +13,11 @@ const deletePost = async (postId, editModal) => {
       },
     });
     if (response.ok) {
-      getPosts();
+      if (window.location.href.includes("feed")) {
+        getPosts();
+      } else if (window.location.href.includes("profile")) {
+        createPostsHTML();
+      }
       editModal.hide();
     }
   } catch (error) {

@@ -1,5 +1,6 @@
 import { getPosts } from "./fetchPosts.mjs";
 import { deletePost } from "./deletePost.mjs";
+import { createPostsHTML } from "../profile/createProfilePosts.mjs";
 
 const updatePost = async (postId, updatedPost) => {
   const UPDATE_POST_URL = `https://v2.api.noroff.dev/social/posts/${postId}`;
@@ -15,7 +16,11 @@ const updatePost = async (postId, updatedPost) => {
       },
     });
     if (response.ok) {
-      getPosts();
+      if (window.location.href.includes("feed")) {
+        getPosts();
+      } else if (window.location.href.includes("profile")) {
+        createPostsHTML();
+      }
     }
   } catch (error) {
     console.error("Network error:", error);
