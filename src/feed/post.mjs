@@ -1,20 +1,21 @@
 import { openEditForm } from "./updatePost.mjs";
 
-const postCreatedTime = (post) => {
-  const createdDate = new Date(post.created);
-  const currentTime = new Date();
-
-  const timeDifference = currentTime - createdDate;
-  const timeDifferenceInMinutes = timeDifference / (1000 * 60);
-
-  if (timeDifferenceInMinutes < 60) {
-    return `${Math.floor(timeDifferenceInMinutes)} minutes ago`;
-  } else {
-    const timeDifferenceInHours = timeDifferenceInMinutes / 60;
-    return `${Math.floor(timeDifferenceInHours)} hours ago`;
-  }
-};
-
+/**
+ * Create the inner HTML for a post element
+ * @param {HTMLElement} element
+ * @param {Object} post
+ * @param {boolean} isModal
+ * @returns {HTMLElement}
+ * @example
+ * ```js
+ * Create a post element, create the inner HTML and append it to the feed container
+ * const feedContainer = document.querySelector(".posts-feed");
+ * const feedPost = document.createElement("div");
+ * feedPost.classList.add("feed-post", "card", "w-100");
+ * createPostInnerHTML(feedPost, post);
+ * feedContainer.appendChild(feedPost);
+ * ```
+ */
 const createPostInnerHTML = (element, post, isModal = false) => {
   const likes = post._count.reactions === 1 ? "like" : "likes";
   const comments = post._count.comments === 1 ? "comment" : "comments";
@@ -118,7 +119,12 @@ const createPostModalHTML = (post) => {
 
   postComments.forEach((comment) => {
     const commentElement = document.createElement("div");
-    commentElement.classList.add("d-flex", "align-items-center", "gap-2", "mb-2");
+    commentElement.classList.add(
+      "d-flex",
+      "align-items-center",
+      "gap-2",
+      "mb-2"
+    );
     commentElement.innerHTML = `
       <img
         src="${comment.author.avatar.url}"
@@ -157,6 +163,21 @@ const createPostModalHTML = (post) => {
       </div>
     </div>
   </div>`;
+};
+
+const postCreatedTime = (post) => {
+  const createdDate = new Date(post.created);
+  const currentTime = new Date();
+
+  const timeDifference = currentTime - createdDate;
+  const timeDifferenceInMinutes = timeDifference / (1000 * 60);
+
+  if (timeDifferenceInMinutes < 60) {
+    return `${Math.floor(timeDifferenceInMinutes)} minutes ago`;
+  } else {
+    const timeDifferenceInHours = timeDifferenceInMinutes / 60;
+    return `${Math.floor(timeDifferenceInHours)} hours ago`;
+  }
 };
 
 export { createPostInnerHTML, createPostModalHTML };

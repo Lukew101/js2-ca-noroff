@@ -22,11 +22,14 @@ const login = async (requestData) => {
       window.location.href = "/src/feed/";
     } else {
       const errorData = await response.json();
-      const errorMessageElement = document.querySelector(".password-invalid-feedback");
-      errorMessageElement.innerHTML = errorData.errors[0].message;
+      const errorMessage = errorData.errors[0].message;
+      throw new Error(errorMessage);
     }
   } catch (error) {
-    console.error("Network error:", error);
+    const errorMessageElement = document.querySelector(
+      ".password-invalid-feedback"
+    );
+    errorMessageElement.innerHTML = error.message || "Network error";
   }
 };
 

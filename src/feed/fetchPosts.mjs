@@ -31,9 +31,9 @@ const displayPosts = (posts) => {
   posts.forEach((post) => {
     const feedPost = document.createElement("div");
     feedPost.classList.add("feed-post", "card", "w-100");
-
     createPostInnerHTML(feedPost, post);
     feedContainer.appendChild(feedPost);
+
     const postComments = feedPost.querySelectorAll(".post-comments");
     postComments.forEach((postComment) => {
       postComment.addEventListener("click", async (event) => {
