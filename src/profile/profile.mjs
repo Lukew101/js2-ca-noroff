@@ -6,6 +6,8 @@ const FETCH_PROFILE_URL = `https://v2.api.noroff.dev/social/profiles/${user.name
 const followersContainer = document.querySelector(".followers-container");
 const followingContainer = document.querySelector(".following-container");
 
+document.title = `${user.name}'s Profile | Weave`;
+
 const fetchFullProfile = async () => {
   try {
     const response = await fetch(FETCH_PROFILE_URL, {
