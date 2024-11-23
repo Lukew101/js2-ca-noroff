@@ -48,7 +48,7 @@ const registerUser = async (requestData) => {
       setTimeout(() => {
         errorResponseDisplay.innerHTML = "";
         errorResponseDisplay.classList.remove("alert", "alert-danger");
-      }, 5000);
+      }, 6000);
     }
   } catch (error) {
     console.error("Network error:", error);

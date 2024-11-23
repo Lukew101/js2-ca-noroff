@@ -21,15 +21,18 @@ const login = async (requestData) => {
       saveToLocalStorage("profile", JSON.stringify(profile));
       window.location.href = "/src/feed/";
     } else {
+      const errorResponseDisplay = document.querySelector(".error-response-display");
       const errorData = await response.json();
-      const errorMessage = errorData.errors[0].message;
-      throw new Error(errorMessage);
+      errorResponseDisplay.innerHTML = errorData.errors[0].message;
+      errorResponseDisplay.classList.add("alert", "alert-danger");
+
+      setTimeout(() => {
+        errorResponseDisplay.innerHTML = "";
+        errorResponseDisplay.classList.remove("alert", "alert-danger");
+      }, 5000);
     }
   } catch (error) {
-    const errorMessageElement = document.querySelector(
-      ".password-invalid-feedback"
-    );
-    errorMessageElement.innerHTML = error.message || "Network error";
+    console.error("Network error:", error);
   }
 };
 
