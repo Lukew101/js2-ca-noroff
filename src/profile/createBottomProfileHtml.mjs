@@ -46,9 +46,7 @@ export const createBioHTML = (profile) => {
   bioContainer.innerHTML = `
                   <div class="card-body">
                     <h2 class="card-title fs-5 fw-medium mb-3">Bio</h2>
-                    <p class="profile-about-p">
-                      ${profile.bio ? profile.bio : "No bio available."}
-                    </p>
+                    <p>${profile.bio ? profile.bio : "No bio available."}</p>
                   </div>
   `;
 };
