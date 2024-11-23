@@ -72,7 +72,7 @@ export const createFollowHTML = (people, followQuerySelector) => {
                           src="${person.avatar.url}"
                           alt="${person.avatar.alt}"
                           width="65"
-                          height="60"
+                          height="65"
                           class="rounded"
 
                         />
