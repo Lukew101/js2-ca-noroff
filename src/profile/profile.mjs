@@ -33,8 +33,8 @@ const fetchFullProfile = async () => {
   } catch (error) {
     console.error("Error fetching data:", error);
   } finally {
-    profileTopContainer.style.display = "block";
     loadingSpinner.style.display = "none";
+    profileTopContainer.style.display = "block";
   }
 };
 
