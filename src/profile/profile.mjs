@@ -46,7 +46,7 @@ const createTopProfileHTML = (profile) => {
     <section class="row">
       <div class="card mb-3 p-0">
         <img
-          src="${profile.coverPhoto || "../util/pictures/mock-cover-photo.jpg"}"
+          src="${profile.banner.url || "../util/pictures/mock-cover-photo.jpg"}"
           class="card-img-top"
           alt="${profile.name}'s cover photo"
           onerror="this.src='../util/pictures/default-cover-photo.jpg';"
