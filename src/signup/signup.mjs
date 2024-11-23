@@ -40,8 +40,15 @@ const registerUser = async (requestData) => {
       const loginRequestData = { email, password };
       login(loginRequestData);
     } else {
+      const errorResponseDisplay = document.querySelector(".error-response-display");
       const errorData = await response.json();
-      throw new Error(errorData.errors[0].message);
+      errorResponseDisplay.innerHTML = errorData.errors[0].message;
+      errorResponseDisplay.classList.add("alert", "alert-danger");
+
+      setTimeout(() => {
+        errorResponseDisplay.innerHTML = "";
+        errorResponseDisplay.classList.remove("alert", "alert-danger");
+      }, 6000);
     }
   } catch (error) {
     console.error("Network error:", error);

@@ -104,10 +104,10 @@ if (feedSearchForm) {
 
 if (feedSearchForm) {
   searchInput.addEventListener("input", (event) => {
-  if (searchInput.value.trim() === "") {
-    sortPosts(event.target.value);
-  }
-});
+    if (searchInput.value.trim() === "") {
+      sortPosts(event.target.value);
+    }
+  });
 }
 
 export { getPosts };
