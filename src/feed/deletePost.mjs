@@ -13,9 +13,9 @@ const deletePost = async (postId, editModal) => {
       },
     });
     if (response.ok) {
-      if (window.location.href.includes("feed")) {
+      if (window.location.pathname === "/src/feed/") {
         getPosts();
-      } else if (window.location.href.includes("profile")) {
+      } else if (window.location.pathname === "/src/profile/") {
         createPostsHTML();
       }
       editModal.hide();
