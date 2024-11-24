@@ -7,11 +7,15 @@ const feedSearchForm = document.querySelector(".feed-search-form");
 let posts = [];
 let activeFilteredPosts = [];
 
-let isSearching = false;
 let currentPage = 1;
 let isFetching = false;
+let queryValue = "";
+let sortByValue = "";
 
-export const getPosts = async (page = 1) => {
+export const getPosts = async (
+  page = 1,
+  clearDisplayedPosts = false
+) => {
   const feedContainer = document.querySelector(".posts-feed");
   const loadingSpinner = document.createElement("div");
   loadingSpinner.classList.add("spinner-grow");
@@ -37,8 +41,21 @@ export const getPosts = async (page = 1) => {
         throw new Error("No more posts to fetch");
       }
 
-      posts = [...posts, ...responseData.data];
-      displayPosts(posts);
+      if (clearDisplayedPosts) {
+        activeFilteredPosts = [];
+        posts = [...responseData.data];
+      } else {
+        posts = [...posts, ...responseData.data];
+      }
+
+      if (activeFilteredPosts && activeFilteredPosts.length > 0) {
+        activeFilteredPosts = [...activeFilteredPosts, ...responseData.data];
+        sortPosts(sortByValue);
+        filterPosts(queryValue);
+        displayPosts(activeFilteredPosts);
+      } else {
+        displayPosts(posts);
+      }
     }
   } catch (error) {
     console.error(error);
@@ -103,7 +120,8 @@ const sortPosts = (sortBy) => {
 
 if (document.querySelector(".form-select")) {
   document.querySelector(".form-select").addEventListener("change", (event) => {
-    sortPosts(event.target.value);
+    sortByValue = event.target.value;
+    sortPosts(sortByValue);
   });
 }
 
@@ -121,10 +139,9 @@ if (feedSearchForm) {
     event.preventDefault();
     const query = searchInput.value.trim();
     if (query) {
-      isSearching = true;
-      filterPosts(query);
+      queryValue = query;
+      filterPosts(queryValue);
     } else {
-      isSearching = false;
       activeFilteredPosts = [];
       displayPosts(posts);
     }
@@ -134,9 +151,9 @@ if (feedSearchForm) {
 if (feedSearchForm) {
   searchInput.addEventListener("input", () => {
     if (searchInput.value.trim() === "") {
-      isSearching = false;
       activeFilteredPosts = [];
-      displayPosts(posts);
+      posts = [];
+      getPosts();
     }
   });
 }
@@ -144,7 +161,7 @@ if (feedSearchForm) {
 export const observer = new IntersectionObserver(
   async (entries) => {
     const entry = entries[0];
-    if (entry.isIntersecting && !isFetching && !isSearching) {
+    if (entry.isIntersecting && !isFetching) {
       isFetching = true;
       try {
         await getPosts(currentPage, false);
