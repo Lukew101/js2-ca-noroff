@@ -9,7 +9,6 @@ let activeFilteredPosts = [];
 
 let currentPage = 1;
 let isSearching = false;
-let isFetching = false;
 let queryValue = "";
 let sortByValue = "";
 
@@ -128,9 +127,7 @@ if (document.querySelector(".form-select")) {
 }
 
 const filterPosts = (query) => {
-  const sourcePosts =
-    activeFilteredPosts.length > 0 ? activeFilteredPosts : posts;
-  activeFilteredPosts = sourcePosts.filter((post) =>
+  activeFilteredPosts = posts.filter((post) =>
     post.title.toLowerCase().includes(query.toLowerCase())
   );
   displayPosts(activeFilteredPosts);
@@ -168,17 +165,13 @@ export const observer = new IntersectionObserver(
     const entry = entries[0];
     if (
       entry.isIntersecting &&
-      !isFetching &&
       (!isSearching || activeFilteredPosts.length !== 0)
     ) {
-      isFetching = true;
       try {
         await getPosts(currentPage, false);
         currentPage++;
       } catch (error) {
         console.error("Error fetching posts during scroll:", error);
-      } finally {
-        isFetching = false;
       }
     }
   },
