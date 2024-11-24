@@ -23,6 +23,8 @@ const createPostInnerHTML = (element, post, isModal = false) => {
 
   const isAuthor =
     post.author.email === JSON.parse(localStorage.getItem("profile")).email;
+  
+    const isFeedPage = window.location.pathname === "/src/feed/";
 
   element.innerHTML = `
                 <div class="card-body">
@@ -46,7 +48,7 @@ const createPostInnerHTML = (element, post, isModal = false) => {
                       </div>
                     </div>
                     ${
-                      isAuthor && !isModal
+                      isAuthor && !isModal && !isFeedPage
                         ? `
                         <div class="d-flex align-items-center gap-2 pointer edit-post">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
