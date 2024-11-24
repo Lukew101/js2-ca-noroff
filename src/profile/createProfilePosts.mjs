@@ -1,3 +1,4 @@
+import { buildPost } from "../feed/fetchPosts.mjs";
 import { createPostInnerHTML } from "../feed/post.mjs";
 
 const user = JSON.parse(localStorage.getItem("profile"));
@@ -33,7 +34,7 @@ const fetchUsersPosts = async () => {
       const postElement = document.createElement("div");
       postElement.classList.add("feed-post", "card", "w-100");
       createPostInnerHTML(postElement, post);
-      profilePostsContainer.appendChild(postElement);
+      buildPost(post, profilePostsContainer);
     });
   };
   
