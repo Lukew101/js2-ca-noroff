@@ -21,7 +21,7 @@ const createPost = async (event) => {
     });
     if (response.ok) {
       createPostForm.reset();
-      getPosts();
+      getPosts(1, true);
     }
   } catch (error) {
     console.error("Network error:", error);
