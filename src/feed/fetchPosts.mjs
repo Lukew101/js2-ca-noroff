@@ -10,14 +10,10 @@ let activeFilteredPosts = [];
 let currentPage = 1;
 let isSearching = false;
 let isFetching = false;
-let searchPerformed = false;
 let queryValue = "";
 let sortByValue = "";
 
-export const getPosts = async (
-  page = 1,
-  clearDisplayedPosts = false
-) => {
+export const getPosts = async (page = 1, clearDisplayedPosts = false) => {
   const feedContainer = document.querySelector(".posts-feed");
   const loadingSpinner = document.createElement("div");
   loadingSpinner.classList.add("spinner-grow");
@@ -102,7 +98,11 @@ const displayPosts = (posts) => {
 
 const sortPosts = (sortBy) => {
   const sourcePosts =
-  searchPerformed && activeFilteredPosts.length === 0 && queryValue ? [] : (activeFilteredPosts.length > 0 ? activeFilteredPosts : posts);
+    activeFilteredPosts.length === 0 && queryValue
+      ? []
+      : activeFilteredPosts.length > 0
+      ? activeFilteredPosts
+      : posts;
   const sortedPosts = [...sourcePosts];
 
   switch (sortBy) {
@@ -128,7 +128,6 @@ if (document.querySelector(".form-select")) {
 }
 
 const filterPosts = (query) => {
-  searchPerformed = true;
   const sourcePosts =
     activeFilteredPosts.length > 0 ? activeFilteredPosts : posts;
   activeFilteredPosts = sourcePosts.filter((post) =>
@@ -159,7 +158,7 @@ if (feedSearchForm) {
       } else {
         activeFilteredPosts = [];
         displayPosts(posts);
-      };
+      }
     }
   });
 }
@@ -167,7 +166,11 @@ if (feedSearchForm) {
 export const observer = new IntersectionObserver(
   async (entries) => {
     const entry = entries[0];
-    if (entry.isIntersecting && !isFetching  && (!isSearching || activeFilteredPosts.length !== 0)) {
+    if (
+      entry.isIntersecting &&
+      !isFetching &&
+      (!isSearching || activeFilteredPosts.length !== 0)
+    ) {
       isFetching = true;
       try {
         await getPosts(currentPage, false);
