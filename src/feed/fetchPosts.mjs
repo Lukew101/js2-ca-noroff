@@ -66,31 +66,35 @@ const displayPosts = (posts) => {
   feedContainer.innerHTML = "";
 
   posts.forEach((post) => {
-    const feedPost = document.createElement("div");
-    feedPost.classList.add("feed-post", "card", "w-100");
-    createPostInnerHTML(feedPost, post);
-    feedContainer.appendChild(feedPost);
+    buildPost(post, feedContainer);
+  });
+};
 
-    const postComments = feedPost.querySelectorAll(".post-comments");
-    postComments.forEach((postComment) => {
-      postComment.addEventListener("click", async (event) => {
-        postComment.dataset.postId = post.id;
-        const postId = event.currentTarget.dataset.postId;
-        const POST_WITH_COMMENTS_URL = `https://v2.api.noroff.dev/social/posts/${postId}?_comments=true&_author=true`;
+export const buildPost = (post, displayContainer) => {
+  const feedPost = document.createElement("div");
+  feedPost.classList.add("feed-post", "card", "w-100");
+  createPostInnerHTML(feedPost, post);
+  displayContainer.appendChild(feedPost);
 
-        const postWithComments = await getPost(POST_WITH_COMMENTS_URL);
-        const modalHTML = createPostModalHTML(postWithComments);
+  const postComments = feedPost.querySelectorAll(".post-comments");
+  postComments.forEach((postComment) => {
+    postComment.addEventListener("click", async (event) => {
+      postComment.dataset.postId = post.id;
+      const postId = event.currentTarget.dataset.postId;
+      const POST_WITH_COMMENTS_URL = `https://v2.api.noroff.dev/social/posts/${postId}?_comments=true&_author=true`;
 
-        let existingModal = document.querySelector("#dynamicPostModal");
-        if (existingModal) {
-          existingModal.remove();
-        }
-        document.body.insertAdjacentHTML("beforeend", modalHTML);
-        const dynamicModal = new bootstrap.Modal(
-          document.querySelector("#dynamicPostModal")
-        );
-        dynamicModal.show();
-      });
+      const postWithComments = await getPost(POST_WITH_COMMENTS_URL);
+      const modalHTML = createPostModalHTML(postWithComments);
+
+      let existingModal = document.querySelector("#dynamicPostModal");
+      if (existingModal) {
+        existingModal.remove();
+      }
+      document.body.insertAdjacentHTML("beforeend", modalHTML);
+      const dynamicModal = new bootstrap.Modal(
+        document.querySelector("#dynamicPostModal")
+      );
+      dynamicModal.show();
     });
   });
 };
