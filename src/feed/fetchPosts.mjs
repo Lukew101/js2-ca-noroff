@@ -8,7 +8,9 @@ let posts = [];
 let activeFilteredPosts = [];
 
 let currentPage = 1;
+let isSearching = false;
 let isFetching = false;
+let searchPerformed = false;
 let queryValue = "";
 let sortByValue = "";
 
@@ -100,7 +102,7 @@ const displayPosts = (posts) => {
 
 const sortPosts = (sortBy) => {
   const sourcePosts =
-    activeFilteredPosts.length > 0 ? activeFilteredPosts : posts;
+  searchPerformed && activeFilteredPosts.length === 0 && queryValue ? [] : (activeFilteredPosts.length > 0 ? activeFilteredPosts : posts);
   const sortedPosts = [...sourcePosts];
 
   switch (sortBy) {
@@ -126,6 +128,7 @@ if (document.querySelector(".form-select")) {
 }
 
 const filterPosts = (query) => {
+  searchPerformed = true;
   const sourcePosts =
     activeFilteredPosts.length > 0 ? activeFilteredPosts : posts;
   activeFilteredPosts = sourcePosts.filter((post) =>
@@ -138,22 +141,25 @@ if (feedSearchForm) {
   feedSearchForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const query = searchInput.value.trim();
-    if (query) {
-      queryValue = query;
-      filterPosts(queryValue);
-    } else {
-      activeFilteredPosts = [];
-      displayPosts(posts);
-    }
+    if (!query) return;
+    queryValue = query;
+    isSearching = true;
+    filterPosts(queryValue);
   });
 }
 
 if (feedSearchForm) {
   searchInput.addEventListener("input", () => {
     if (searchInput.value.trim() === "") {
-      activeFilteredPosts = [];
-      posts = [];
-      getPosts();
+      queryValue = "";
+      isSearching = false;
+      if (sortByValue) {
+        activeFilteredPosts = [];
+        sortPosts(sortByValue);
+      } else {
+        activeFilteredPosts = [];
+        displayPosts(posts);
+      };
     }
   });
 }
@@ -161,7 +167,7 @@ if (feedSearchForm) {
 export const observer = new IntersectionObserver(
   async (entries) => {
     const entry = entries[0];
-    if (entry.isIntersecting && !isFetching) {
+    if (entry.isIntersecting && !isFetching  && (!isSearching || activeFilteredPosts.length !== 0)) {
       isFetching = true;
       try {
         await getPosts(currentPage, false);
