@@ -5,6 +5,8 @@ const searchInput = document.querySelector('.form-control[type="search"]');
 const feedSearchForm = document.querySelector(".feed-search-form");
 
 let posts = [];
+let activeFilteredPosts = [];
+
 let isSearching = false;
 let currentPage = 1;
 let isFetching = false;
@@ -80,7 +82,10 @@ const displayPosts = (posts) => {
 };
 
 const sortPosts = (sortBy) => {
-  const sortedPosts = [...posts];
+  const sourcePosts =
+    activeFilteredPosts.length > 0 ? activeFilteredPosts : posts;
+  const sortedPosts = [...sourcePosts];
+
   switch (sortBy) {
     case "Most popular":
       sortedPosts.sort((a, b) => b._count.reactions - a._count.reactions);
@@ -93,6 +98,7 @@ const sortPosts = (sortBy) => {
       break;
   }
   displayPosts(sortedPosts);
+  activeFilteredPosts = sortedPosts;
 };
 
 if (document.querySelector(".form-select")) {
@@ -102,10 +108,12 @@ if (document.querySelector(".form-select")) {
 }
 
 const filterPosts = (query) => {
-  const filteredPosts = posts.filter((post) =>
+  const sourcePosts =
+    activeFilteredPosts.length > 0 ? activeFilteredPosts : posts;
+  activeFilteredPosts = sourcePosts.filter((post) =>
     post.title.toLowerCase().includes(query.toLowerCase())
   );
-  displayPosts(filteredPosts);
+  displayPosts(activeFilteredPosts);
 };
 
 if (feedSearchForm) {
@@ -117,15 +125,17 @@ if (feedSearchForm) {
       filterPosts(query);
     } else {
       isSearching = false;
+      activeFilteredPosts = [];
       displayPosts(posts);
     }
   });
 }
 
 if (feedSearchForm) {
-  searchInput.addEventListener("input", (event) => {
+  searchInput.addEventListener("input", () => {
     if (searchInput.value.trim() === "") {
       isSearching = false;
+      activeFilteredPosts = [];
       displayPosts(posts);
     }
   });
