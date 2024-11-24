@@ -1,12 +1,27 @@
 import { createPostInnerHTML, createPostModalHTML } from "./post.mjs";
 import { getPost } from "./fetchPost.mjs";
 
-let posts = [];
+const searchInput = document.querySelector('.form-control[type="search"]');
+const feedSearchForm = document.querySelector(".feed-search-form");
 
-const getPosts = async () => {
+let posts = [];
+let isSearching = false;
+let currentPage = 1;
+let isFetching = false;
+
+export const getPosts = async (page = 1) => {
+  const feedContainer = document.querySelector(".posts-feed");
+  const loadingSpinner = document.createElement("div");
+  loadingSpinner.classList.add("spinner-grow");
+  loadingSpinner.setAttribute("role", "status");
+
+  const showLoading = () => feedContainer.appendChild(loadingSpinner);
+  const hideLoading = () => loadingSpinner.remove();
+
   try {
+    showLoading();
     const response = await fetch(
-      "https://v2.api.noroff.dev/social/posts?limit=50&_author=true",
+      `https://v2.api.noroff.dev/social/posts?limit=20&page=${page}&_author=true`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -16,11 +31,18 @@ const getPosts = async () => {
     );
     if (response.ok) {
       const responseData = await response.json();
-      posts = responseData.data;
-      displayPosts(responseData.data);
+      if (responseData.data.length === 0) {
+        throw new Error("No more posts to fetch");
+      }
+
+      posts = [...posts, ...responseData.data];
+      console.log("Fetched posts:", posts);
+      displayPosts(posts);
     }
   } catch (error) {
-    console.error("Network error:", error);
+    console.error(error);
+  } finally {
+    hideLoading();
   }
 };
 
@@ -80,9 +102,6 @@ if (document.querySelector(".form-select")) {
   });
 }
 
-const searchInput = document.querySelector('.form-control[type="search"]');
-const feedSearchForm = document.querySelector(".feed-search-form");
-
 const filterPosts = (query) => {
   const filteredPosts = posts.filter((post) =>
     post.title.toLowerCase().includes(query.toLowerCase())
@@ -95,8 +114,11 @@ if (feedSearchForm) {
     event.preventDefault();
     const query = searchInput.value.trim();
     if (query) {
+      isSearching = true;
+      console.log("Searching for:", query);
       filterPosts(query);
     } else {
+      isSearching = false;
       displayPosts(posts);
     }
   });
@@ -105,9 +127,28 @@ if (feedSearchForm) {
 if (feedSearchForm) {
   searchInput.addEventListener("input", (event) => {
     if (searchInput.value.trim() === "") {
-      sortPosts(event.target.value);
+      isSearching = false;
+      displayPosts(posts);
     }
   });
 }
 
-export { getPosts };
+export const observer = new IntersectionObserver(
+  async (entries) => {
+    const entry = entries[0];
+    if (entry.isIntersecting && !isFetching && !isSearching) {
+      isFetching = true;
+      try {
+        await getPosts(currentPage, false);
+        currentPage++;
+      } catch (error) {
+        console.error("Error fetching posts during scroll:", error);
+      } finally {
+        isFetching = false;
+      }
+    }
+  },
+  {
+    rootMargin: "300px",
+  }
+);
