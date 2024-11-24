@@ -36,7 +36,6 @@ export const getPosts = async (page = 1) => {
       }
 
       posts = [...posts, ...responseData.data];
-      console.log("Fetched posts:", posts);
       displayPosts(posts);
     }
   } catch (error) {
@@ -115,7 +114,6 @@ if (feedSearchForm) {
     const query = searchInput.value.trim();
     if (query) {
       isSearching = true;
-      console.log("Searching for:", query);
       filterPosts(query);
     } else {
       isSearching = false;
