@@ -1,4 +1,5 @@
-import { openEditForm } from "./updatePost.mjs";
+import openEditForm from "./openEditForm.mjs";
+import getPost from "./http-requests/fetchPost.mjs";
 
 /**
  * Create the inner HTML for a post element
@@ -23,8 +24,8 @@ const createPostInnerHTML = (element, post, isModal = false) => {
 
   const isAuthor =
     post.author.email === JSON.parse(localStorage.getItem("profile")).email;
-  
-    const isFeedPage = window.location.pathname === "/src/feed/";
+
+  const isFeedPage = window.location.pathname === "/src/feed/";
 
   element.innerHTML = `
                 <div class="card-body">
@@ -182,4 +183,33 @@ const postCreatedTime = (post) => {
   }
 };
 
-export { createPostInnerHTML, createPostModalHTML };
+const buildPost = (post, displayContainer) => {
+  const feedPost = document.createElement("div");
+  feedPost.classList.add("feed-post", "card", "w-100");
+  createPostInnerHTML(feedPost, post);
+  displayContainer.appendChild(feedPost);
+
+  const postComments = feedPost.querySelectorAll(".post-comments");
+  postComments.forEach((postComment) => {
+    postComment.addEventListener("click", async (event) => {
+      postComment.dataset.postId = post.id;
+      const postId = event.currentTarget.dataset.postId;
+      const POST_WITH_COMMENTS_URL = `https://v2.api.noroff.dev/social/posts/${postId}?_comments=true&_author=true`;
+
+      const postWithComments = await getPost(POST_WITH_COMMENTS_URL);
+      const modalHTML = createPostModalHTML(postWithComments);
+
+      let existingModal = document.querySelector("#dynamicPostModal");
+      if (existingModal) {
+        existingModal.remove();
+      }
+      document.body.insertAdjacentHTML("beforeend", modalHTML);
+      const dynamicModal = new bootstrap.Modal(
+        document.querySelector("#dynamicPostModal")
+      );
+      dynamicModal.show();
+    });
+  });
+};
+
+export default buildPost;

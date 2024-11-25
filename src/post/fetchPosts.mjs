@@ -1,5 +1,4 @@
-import { createPostInnerHTML, createPostModalHTML } from "./post.mjs";
-import { getPost } from "./fetchPost.mjs";
+import { displayPosts } from "../feed/feedUtils.mjs";
 
 const searchInput = document.querySelector('.form-control[type="search"]');
 const feedSearchForm = document.querySelector(".feed-search-form");
@@ -59,44 +58,6 @@ export const getPosts = async (page = 1, clearDisplayedPosts = false) => {
   } finally {
     hideLoading();
   }
-};
-
-const displayPosts = (posts) => {
-  const feedContainer = document.querySelector(".posts-feed");
-  feedContainer.innerHTML = "";
-
-  posts.forEach((post) => {
-    buildPost(post, feedContainer);
-  });
-};
-
-export const buildPost = (post, displayContainer) => {
-  const feedPost = document.createElement("div");
-  feedPost.classList.add("feed-post", "card", "w-100");
-  createPostInnerHTML(feedPost, post);
-  displayContainer.appendChild(feedPost);
-
-  const postComments = feedPost.querySelectorAll(".post-comments");
-  postComments.forEach((postComment) => {
-    postComment.addEventListener("click", async (event) => {
-      postComment.dataset.postId = post.id;
-      const postId = event.currentTarget.dataset.postId;
-      const POST_WITH_COMMENTS_URL = `https://v2.api.noroff.dev/social/posts/${postId}?_comments=true&_author=true`;
-
-      const postWithComments = await getPost(POST_WITH_COMMENTS_URL);
-      const modalHTML = createPostModalHTML(postWithComments);
-
-      let existingModal = document.querySelector("#dynamicPostModal");
-      if (existingModal) {
-        existingModal.remove();
-      }
-      document.body.insertAdjacentHTML("beforeend", modalHTML);
-      const dynamicModal = new bootstrap.Modal(
-        document.querySelector("#dynamicPostModal")
-      );
-      dynamicModal.show();
-    });
-  });
 };
 
 const sortPosts = (sortBy) => {

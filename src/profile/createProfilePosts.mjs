@@ -1,5 +1,4 @@
-import { buildPost } from "../feed/fetchPosts.mjs";
-import { createPostInnerHTML } from "../feed/post.mjs";
+import buildPost from "../post/buildPost.mjs";
 
 const user = JSON.parse(localStorage.getItem("profile"));
 const FETCH_USER_POSTS_URL = `https://v2.api.noroff.dev/social/profiles/${user.name}/posts?_comments=true&_author=true`;
@@ -33,7 +32,6 @@ const fetchUsersPosts = async () => {
     posts.forEach((post) => {
       const postElement = document.createElement("div");
       postElement.classList.add("feed-post", "card", "w-100");
-      createPostInnerHTML(postElement, post);
       buildPost(post, profilePostsContainer);
     });
   };

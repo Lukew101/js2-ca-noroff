@@ -11,7 +11,7 @@ const fetchFullProfile = async () => {
   const profileTopContainer = document.querySelector(".profile-container");
   const loadingSpinner = document.querySelector(".spinner-container");
 
-  profileTopContainer.style.visibility = "hidden";
+  profileTopContainer.style.display = "none";
 
   try {
     const response = await fetch(FETCH_PROFILE_URL, {
@@ -35,8 +35,8 @@ const fetchFullProfile = async () => {
   } catch (error) {
     console.error("Error fetching data:", error);
   } finally {
-    loadingSpinner.remove();
-    profileTopContainer.style.visibility = "visible";
+    profileTopContainer.style.display = "block";
+    loadingSpinner.remove(); 
   }
 };
 

@@ -1,5 +1,5 @@
-import { getPosts } from "./fetchPosts.mjs";
-import { createPostsHTML } from "../profile/createProfilePosts.mjs";
+import { getPosts } from "../fetchPosts.mjs";
+import { createPostsHTML } from "../../profile/createProfilePosts.mjs";
 
 const deletePost = async (postId, editModal) => {
   const CREATE_POST_URL = `https://v2.api.noroff.dev/social/posts/${postId}`;
@@ -25,4 +25,4 @@ const deletePost = async (postId, editModal) => {
   }
 };
 
-export { deletePost };
+export default deletePost;

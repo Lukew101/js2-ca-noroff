@@ -1,4 +1,4 @@
-import { getPosts } from "./fetchPosts.mjs";
+import { getPosts } from "../fetchPosts.mjs";
 
 const createPostForm = document.querySelector("#createPostForm");
 
@@ -28,4 +28,4 @@ const createPost = async (event) => {
   }
 };
 
-export { createPost };
+export default createPost;

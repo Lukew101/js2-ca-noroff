@@ -31,4 +31,4 @@ const getPost = async (fetchURL) => {
   }
 };
 
-export { getPost };
+export default getPost;
