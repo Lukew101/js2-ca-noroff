@@ -1,5 +1,4 @@
-import { createPostInnerHTML, createPostModalHTML } from "./post.mjs";
-import { getPost } from "./fetchPost.mjs";
+import { displayPosts, sortPosts, filterPosts } from "./feedUtils.mjs";
 
 const searchInput = document.querySelector('.form-control[type="search"]');
 const feedSearchForm = document.querySelector(".feed-search-form");
@@ -12,7 +11,7 @@ let isSearching = false;
 let queryValue = "";
 let sortByValue = "";
 
-export const getPosts = async (page = 1, clearDisplayedPosts = false) => {
+const fetchFeedPosts = async (page = 1, clearDisplayedPosts = false) => {
   const feedContainer = document.querySelector(".posts-feed");
   const loadingSpinner = document.createElement("div");
   loadingSpinner.classList.add("spinner-grow");
@@ -47,9 +46,14 @@ export const getPosts = async (page = 1, clearDisplayedPosts = false) => {
 
       if (activeFilteredPosts && activeFilteredPosts.length > 0) {
         activeFilteredPosts = [...activeFilteredPosts, ...responseData.data];
-        sortPosts(sortByValue);
-        filterPosts(queryValue);
-        displayPosts(activeFilteredPosts);
+        activeFilteredPosts = sortPosts(
+          posts,
+          activeFilteredPosts,
+          sortByValue,
+          queryValue,
+          displayPosts
+        );
+        activeFilteredPosts = filterPosts(posts, queryValue, displayPosts);
       } else {
         displayPosts(posts);
       }
@@ -61,81 +65,18 @@ export const getPosts = async (page = 1, clearDisplayedPosts = false) => {
   }
 };
 
-const displayPosts = (posts) => {
-  const feedContainer = document.querySelector(".posts-feed");
-  feedContainer.innerHTML = "";
-
-  posts.forEach((post) => {
-    buildPost(post, feedContainer);
-  });
-};
-
-export const buildPost = (post, displayContainer) => {
-  const feedPost = document.createElement("div");
-  feedPost.classList.add("feed-post", "card", "w-100");
-  createPostInnerHTML(feedPost, post);
-  displayContainer.appendChild(feedPost);
-
-  const postComments = feedPost.querySelectorAll(".post-comments");
-  postComments.forEach((postComment) => {
-    postComment.addEventListener("click", async (event) => {
-      postComment.dataset.postId = post.id;
-      const postId = event.currentTarget.dataset.postId;
-      const POST_WITH_COMMENTS_URL = `https://v2.api.noroff.dev/social/posts/${postId}?_comments=true&_author=true`;
-
-      const postWithComments = await getPost(POST_WITH_COMMENTS_URL);
-      const modalHTML = createPostModalHTML(postWithComments);
-
-      let existingModal = document.querySelector("#dynamicPostModal");
-      if (existingModal) {
-        existingModal.remove();
-      }
-      document.body.insertAdjacentHTML("beforeend", modalHTML);
-      const dynamicModal = new bootstrap.Modal(
-        document.querySelector("#dynamicPostModal")
-      );
-      dynamicModal.show();
-    });
-  });
-};
-
-const sortPosts = (sortBy) => {
-  const sourcePosts =
-    activeFilteredPosts.length === 0 && queryValue
-      ? []
-      : activeFilteredPosts.length > 0
-      ? activeFilteredPosts
-      : posts;
-  const sortedPosts = [...sourcePosts];
-
-  switch (sortBy) {
-    case "Most popular":
-      sortedPosts.sort((a, b) => b._count.reactions - a._count.reactions);
-      break;
-    case "Newest":
-      sortedPosts.sort((a, b) => new Date(b.created) - new Date(a.created));
-      break;
-    case "Oldest":
-      sortedPosts.sort((a, b) => new Date(a.created) - new Date(b.created));
-      break;
-  }
-  displayPosts(sortedPosts);
-  activeFilteredPosts = sortedPosts;
-};
-
 if (document.querySelector(".form-select")) {
   document.querySelector(".form-select").addEventListener("change", (event) => {
     sortByValue = event.target.value;
-    sortPosts(sortByValue);
+    activeFilteredPosts = sortPosts(
+      posts,
+      activeFilteredPosts,
+      sortByValue,
+      queryValue,
+      displayPosts
+    );
   });
 }
-
-const filterPosts = (query) => {
-  activeFilteredPosts = posts.filter((post) =>
-    post.title.toLowerCase().includes(query.toLowerCase())
-  );
-  displayPosts(activeFilteredPosts);
-};
 
 if (feedSearchForm) {
   feedSearchForm.addEventListener("submit", (event) => {
@@ -144,7 +85,7 @@ if (feedSearchForm) {
     if (!query) return;
     queryValue = query;
     isSearching = true;
-    filterPosts(queryValue);
+    activeFilteredPosts = filterPosts(posts, queryValue, displayPosts);
   });
 }
 
@@ -155,7 +96,13 @@ if (feedSearchForm) {
       isSearching = false;
       if (sortByValue) {
         activeFilteredPosts = [];
-        sortPosts(sortByValue);
+        activeFilteredPosts = sortPosts(
+          posts,
+          activeFilteredPosts,
+          sortByValue,
+          queryValue,
+          displayPosts
+        );
       } else {
         activeFilteredPosts = [];
         displayPosts(posts);
@@ -164,7 +111,7 @@ if (feedSearchForm) {
   });
 }
 
-export const observer = new IntersectionObserver(
+const observer = new IntersectionObserver(
   async (entries) => {
     const entry = entries[0];
     if (
@@ -172,7 +119,7 @@ export const observer = new IntersectionObserver(
       (!isSearching || activeFilteredPosts.length !== 0)
     ) {
       try {
-        await getPosts(currentPage, false);
+        await fetchFeedPosts(currentPage, false);
         currentPage++;
       } catch (error) {
         console.error("Error fetching posts during scroll:", error);
@@ -183,3 +130,5 @@ export const observer = new IntersectionObserver(
     rootMargin: "300px",
   }
 );
+
+export { observer, fetchFeedPosts };

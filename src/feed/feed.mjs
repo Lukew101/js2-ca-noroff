@@ -1,9 +1,9 @@
-import { createPost } from "./createPost.mjs";
-import { observer } from "./fetchPosts.mjs";
+import createPost from "../post/http-requests/createPost.mjs";
+import { observer } from "./handleFeedPosts.mjs";
 
 const user = JSON.parse(localStorage.getItem("profile"));
 const createPostForm = document.querySelector("#createPostForm");
-const sentinel = document.getElementById('sentinel');
+const sentinel = document.getElementById("sentinel");
 
 document.title = `${user.name}'s Feed | Weave`;
 

@@ -9,7 +9,7 @@ document.title = `${user.name}'s Profile | Weave`;
 
 const fetchFullProfile = async () => {
   const profileTopContainer = document.querySelector(".profile-container");
-  const loadingSpinner = document.querySelector(".spinner-grow");
+  const loadingSpinner = document.querySelector(".spinner-container");
 
   profileTopContainer.style.display = "none";
 
@@ -35,8 +35,8 @@ const fetchFullProfile = async () => {
   } catch (error) {
     console.error("Error fetching data:", error);
   } finally {
-    loadingSpinner.style.display = "none";
     profileTopContainer.style.display = "block";
+    loadingSpinner.remove(); 
   }
 };
 

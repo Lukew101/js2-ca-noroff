@@ -1,4 +1,4 @@
-import { getPosts } from "./fetchPosts.mjs";
+import { fetchFeedPosts } from "../../feed/handleFeedPosts.mjs";
 
 const createPostForm = document.querySelector("#createPostForm");
 
@@ -21,11 +21,11 @@ const createPost = async (event) => {
     });
     if (response.ok) {
       createPostForm.reset();
-      getPosts(1, true);
+      fetchFeedPosts(1, true);
     }
   } catch (error) {
     console.error("Network error:", error);
   }
 };
 
-export { createPost };
+export default createPost;

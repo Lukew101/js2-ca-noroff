@@ -18,8 +18,6 @@ const handleLoggedInUser = () => {
   }
 };
 
-handleLoggedInUser();
-
 function displayProfilePicture() {
   const profilePicture = document.querySelectorAll(".profile-pic");
   const profile = JSON.parse(localStorage.getItem("profile"));
@@ -43,3 +41,5 @@ function displaySignout() {
   navbar.appendChild(signOut);
   return signOut;
 }
+
+handleLoggedInUser();
