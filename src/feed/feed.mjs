@@ -1,5 +1,5 @@
 import createPost from "../post/http-requests/createPost.mjs";
-import { observer } from "../post/fetchPosts.mjs";
+import { observer } from "./handleFeedPosts.mjs";
 
 const user = JSON.parse(localStorage.getItem("profile"));
 const createPostForm = document.querySelector("#createPostForm");

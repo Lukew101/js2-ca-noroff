@@ -1,4 +1,4 @@
-import { getPosts } from "../fetchPosts.mjs";
+import { fetchFeedPosts } from "../../feed/handleFeedPosts.mjs";
 import { createPostsHTML } from "../../profile/createProfilePosts.mjs";
 
 const updatePost = async (postId, updatedPost) => {
@@ -16,7 +16,7 @@ const updatePost = async (postId, updatedPost) => {
     });
     if (response.ok) {
       if (window.location.pathname === "/src/feed/") {
-        getPosts();
+        fetchFeedPosts();
       } else if (window.location.pathname === "/src/profile/") {
         createPostsHTML();
       }

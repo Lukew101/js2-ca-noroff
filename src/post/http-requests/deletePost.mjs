@@ -1,4 +1,4 @@
-import { getPosts } from "../fetchPosts.mjs";
+import { fetchFeedPosts } from "../../feed/handleFeedPosts.mjs";
 import { createPostsHTML } from "../../profile/createProfilePosts.mjs";
 
 const deletePost = async (postId, editModal) => {
@@ -14,7 +14,7 @@ const deletePost = async (postId, editModal) => {
     });
     if (response.ok) {
       if (window.location.pathname === "/src/feed/") {
-        getPosts();
+        fetchFeedPosts();
       } else if (window.location.pathname === "/src/profile/") {
         createPostsHTML();
       }
