@@ -30,9 +30,8 @@ const fetchUsersPosts = async () => {
       profilePostsContainer.innerHTML = "<p>No posts available.</p>";
     }
     posts.forEach((post) => {
-      const postElement = document.createElement("div");
-      postElement.classList.add("feed-post", "card", "w-100");
-      buildPost(post, profilePostsContainer);
+      const postElement = buildPost(post);
+      profilePostsContainer.appendChild(postElement);
     });
   };
   

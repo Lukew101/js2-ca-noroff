@@ -3,7 +3,7 @@ import { posts } from "../../feed/handleFeedPosts.mjs";
 
 const createPostForm = document.querySelector("#createPostForm");
 
-const createPost = async (event, displayContainer) => {
+const createPost = async (event) => {
   event.preventDefault();
   const title = document.querySelector("#postTitle").value;
   const body = document.querySelector("#postContent").value;
@@ -25,7 +25,8 @@ const createPost = async (event, displayContainer) => {
       const data = await response.json();
       const post = data.data;
       posts.unshift(post);
-      buildPost(post, displayContainer, true);
+      const postElement = buildPost(post);
+      return postElement;
     }
   } catch (error) {
     console.error("Network error:", error);

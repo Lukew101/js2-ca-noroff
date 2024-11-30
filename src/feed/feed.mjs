@@ -8,8 +8,9 @@ const postsContainer = document.querySelector(".posts-feed");
 
 document.title = `${user.name}'s Feed | Weave`;
 
-createPostForm.addEventListener("submit", (event) => {
-  createPost(event, postsContainer);
+createPostForm.addEventListener("submit", async (event) => {
+  const postElement = await createPost(event);
+  postsContainer.prepend(postElement);
 });
 
 observer.observe(sentinel);

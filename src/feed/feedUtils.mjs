@@ -5,11 +5,18 @@ export const displayPosts = (posts) => {
   feedContainer.innerHTML = "";
 
   posts.forEach((post) => {
-    buildPost(post, feedContainer);
+    const postElement = buildPost(post);
+    feedContainer.appendChild(postElement);
   });
 };
 
-export const sortPosts = (posts, activeFilteredPosts, sortBy, queryValue, displayPosts) => {
+export const sortPosts = (
+  posts,
+  activeFilteredPosts,
+  sortBy,
+  queryValue,
+  displayPosts
+) => {
   const sourcePosts =
     activeFilteredPosts.length === 0 && queryValue
       ? []
