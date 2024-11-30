@@ -183,11 +183,16 @@ const postCreatedTime = (post) => {
   }
 };
 
-const buildPost = (post, displayContainer) => {
+const buildPost = (post, displayContainer, createdPost = false) => {
   const feedPost = document.createElement("div");
   feedPost.classList.add("feed-post", "card", "w-100");
   createPostInnerHTML(feedPost, post);
-  displayContainer.appendChild(feedPost);
+
+  if (createdPost) {
+    displayContainer.insertBefore(feedPost, displayContainer.firstChild);
+  } else {
+    displayContainer.appendChild(feedPost);
+  }
 
   const postComments = feedPost.querySelectorAll(".post-comments");
   postComments.forEach((postComment) => {

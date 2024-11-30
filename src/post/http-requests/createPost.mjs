@@ -1,12 +1,13 @@
-import { fetchFeedPosts } from "../../feed/handleFeedPosts.mjs";
+import buildPost from "../buildPost.mjs";
+import { posts } from "../../feed/handleFeedPosts.mjs";
 
 const createPostForm = document.querySelector("#createPostForm");
 
-const createPost = async (event) => {
+const createPost = async (event, displayContainer) => {
   event.preventDefault();
   const title = document.querySelector("#postTitle").value;
   const body = document.querySelector("#postContent").value;
-  const CREATE_POST_URL = "https://v2.api.noroff.dev/social/posts";
+  const CREATE_POST_URL = "https://v2.api.noroff.dev/social/posts?_author=true";
 
   try {
     const requestData = { title, body };
@@ -21,7 +22,10 @@ const createPost = async (event) => {
     });
     if (response.ok) {
       createPostForm.reset();
-      fetchFeedPosts(1, true);
+      const data = await response.json();
+      const post = data.data;
+      posts.unshift(post);
+      buildPost(post, displayContainer, true);
     }
   } catch (error) {
     console.error("Network error:", error);
