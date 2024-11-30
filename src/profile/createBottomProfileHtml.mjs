@@ -67,7 +67,7 @@ export const createFollowHTML = (people, followQuerySelector) => {
       "mb-2"
     );
     followElement.innerHTML = `
-                    <div class="d-flex flex-column pointer">
+                    <div class="d-flex flex-column">
                         <img
                           src="${person.avatar.url}"
                           alt="${person.avatar.alt}"
