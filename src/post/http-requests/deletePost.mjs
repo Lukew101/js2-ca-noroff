@@ -1,3 +1,5 @@
+import { posts } from "../../feed/handleFeedPosts.mjs";
+
 const deletePost = async (postId, editModal) => {
   const CREATE_POST_URL = `https://v2.api.noroff.dev/social/posts/${postId}`;
 
@@ -11,6 +13,12 @@ const deletePost = async (postId, editModal) => {
     });
     if (response.ok) {
       const post = document.getElementById(postId);
+      if (posts) {
+        const postIndex = posts.findIndex((post) => post.id === postId);
+        if (postIndex !== -1) {
+          posts.splice(postIndex, 1);
+        }
+      }
       post.remove();
       editModal.hide();
     }
