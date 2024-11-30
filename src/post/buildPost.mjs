@@ -25,8 +25,6 @@ const createPostInnerHTML = (element, post, isModal = false) => {
   const isAuthor =
     post.author.email === JSON.parse(localStorage.getItem("profile")).email;
 
-  const isFeedPage = window.location.pathname === "/src/feed/";
-
   element.innerHTML = `
                 <div class="card-body">
                   <div class="d-flex justify-content-between align-items-center">
@@ -49,7 +47,7 @@ const createPostInnerHTML = (element, post, isModal = false) => {
                       </div>
                     </div>
                     ${
-                      isAuthor && !isModal && !isFeedPage
+                      isAuthor && !isModal
                         ? `
                         <div class="d-flex align-items-center gap-2 pointer edit-post">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
@@ -183,17 +181,11 @@ const postCreatedTime = (post) => {
   }
 };
 
-const buildPost = (post, displayContainer, createdPost = false) => {
+const buildPost = (post) => {
   const feedPost = document.createElement("div");
   feedPost.classList.add("feed-post", "card", "w-100");
   feedPost.id = post.id;
   createPostInnerHTML(feedPost, post);
-
-  if (createdPost) {
-    displayContainer.insertBefore(feedPost, displayContainer.firstChild);
-  } else {
-    displayContainer.appendChild(feedPost);
-  }
 
   const postComments = feedPost.querySelectorAll(".post-comments");
   postComments.forEach((postComment) => {
@@ -216,6 +208,8 @@ const buildPost = (post, displayContainer, createdPost = false) => {
       dynamicModal.show();
     });
   });
+
+  return feedPost;
 };
 
 export default buildPost;
