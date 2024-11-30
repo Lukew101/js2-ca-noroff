@@ -1,5 +1,7 @@
 import deletePost from "./http-requests/deletePost.mjs";
 import updatePost from "./http-requests/updatePost.mjs";
+import buildPost from "./buildPost.mjs";
+import { posts } from "../feed/handleFeedPosts.mjs";
 
 const createEditPostModalHTML = (post) => {
   return `
@@ -32,11 +34,14 @@ const createEditPostModalHTML = (post) => {
       `;
 };
 
-const openEditForm = (post) => {
+const openEditForm = (postData) => {
   const existingEditModal = document.querySelector("#editPostModal");
   if (existingEditModal) existingEditModal.remove();
 
-  document.body.insertAdjacentHTML("beforeend", createEditPostModalHTML(post));
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    createEditPostModalHTML(postData)
+  );
 
   const editModal = new bootstrap.Modal(
     document.querySelector("#editPostModal")
@@ -46,19 +51,35 @@ const openEditForm = (post) => {
   const deleteButton = document.querySelector("#deleteButton");
   if (deleteButton) {
     deleteButton.addEventListener("click", () =>
-      deletePost(post.id, editModal)
+      deletePost(postData.id, editModal)
     );
   }
 
   document
     .querySelector("#editPostForm")
-    .addEventListener("submit", (event) => {
+    .addEventListener("submit", async (event) => {
       event.preventDefault();
       const updatedPost = {
         title: document.querySelector("#editPostTitle").value,
         body: document.querySelector("#editPostContent").value,
       };
-      updatePost(post.id, updatedPost);
+      const updatedPostData = await updatePost(postData.id, updatedPost);
+      const postElement = document.getElementById(postData.id);
+
+      postData.title = updatedPostData.title;
+      postData.body = updatedPostData.body;
+
+      if (posts) {
+        const postIndex = posts.findIndex((post) => post.id === postData.id);
+        if (postIndex !== -1) {
+          posts[postIndex] = postData;
+        }
+      }
+
+      const updatedPostElement = buildPost(postData);
+      console.log(updatedPostElement);
+      postElement.replaceWith(updatedPostElement);
+
       editModal.hide();
     });
 };

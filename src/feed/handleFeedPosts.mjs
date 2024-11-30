@@ -131,4 +131,4 @@ const observer = new IntersectionObserver(
   }
 );
 
-export { observer, fetchFeedPosts };
+export { observer, posts };

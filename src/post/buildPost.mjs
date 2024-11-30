@@ -17,23 +17,21 @@ import getPost from "./http-requests/fetchPost.mjs";
  * feedContainer.appendChild(feedPost);
  * ```
  */
-const createPostInnerHTML = (element, post, isModal = false) => {
-  const likes = post._count.reactions === 1 ? "like" : "likes";
-  const comments = post._count.comments === 1 ? "comment" : "comments";
-  const timePostedAgo = postCreatedTime(post);
+const createPostInnerHTML = (element, postData, isModal = false) => {
+  const likes = postData._count.reactions === 1 ? "like" : "likes";
+  const comments = postData._count.comments === 1 ? "comment" : "comments";
+  const timePostedAgo = postCreatedTime(postData);
 
   const isAuthor =
-    post.author.email === JSON.parse(localStorage.getItem("profile")).email;
-
-  const isFeedPage = window.location.pathname === "/src/feed/";
+    postData.author.email === JSON.parse(localStorage.getItem("profile")).email;
 
   element.innerHTML = `
                 <div class="card-body">
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center gap-2 mb-2">
                       <img
-                        src="${post.author.avatar.url}"
-                        alt="${post.author.avatar.alt}"
+                        src="${postData.author.avatar.url}"
+                        alt="${postData.author.avatar.alt}"
                         width="45"
                         height="45"
                         class="rounded-circle profile-pic bg-white border border-1 border-light"
@@ -41,7 +39,7 @@ const createPostInnerHTML = (element, post, isModal = false) => {
                       />
                       <div class="d-flex flex-column">
                         <p class="mt-2 m-0 fw-bolder text-start trending-weave-text">
-                          ${post.author.name}
+                          ${postData.author.name}
                         </p>
                         <p class="m-0 post-posted-time text-start">
                           ${timePostedAgo}
@@ -49,7 +47,7 @@ const createPostInnerHTML = (element, post, isModal = false) => {
                       </div>
                     </div>
                     ${
-                      isAuthor && !isModal && !isFeedPage
+                      isAuthor && !isModal
                         ? `
                         <div class="d-flex align-items-center gap-2 pointer edit-post">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
@@ -61,15 +59,17 @@ const createPostInnerHTML = (element, post, isModal = false) => {
                     }
                   </div>
                   <p class="card-title text-start my-4 fw-bolder fs-5">${
-                    post.title
+                    postData.title
                   }</p>
                   <p class="card-text text-start">
-                    ${post.body}
+                    ${postData.body}
                   </p>
                   <div class="d-flex small-grey-text justify-content-between">
-                    <p class="m-0 pointer">${post._count.reactions} ${likes}</p>
+                    <p class="m-0 pointer">${
+                      postData._count.reactions
+                    } ${likes}</p>
                     <p class="m-0 pointer post-comments">${
-                      post._count.comments
+                      postData._count.comments
                     } ${comments}</p>
                   </div>
                   <div
@@ -104,19 +104,19 @@ const createPostInnerHTML = (element, post, isModal = false) => {
 
   const editButton = element.querySelector(".edit-post");
   if (editButton) {
-    editButton.addEventListener("click", () => openEditForm(post));
+    editButton.addEventListener("click", () => openEditForm(postData));
   }
 
   return element;
 };
 
-const createPostModalHTML = (post) => {
+const createPostModalHTML = (postData) => {
   const modalBody = document.createElement("div");
   modalBody.classList.add("modal-body", "p-4");
 
-  const originalPost = createPostInnerHTML(modalBody, post, true);
+  const originalPost = createPostInnerHTML(modalBody, postData, true);
 
-  const postComments = post.comments;
+  const postComments = postData.comments;
   const commentSection = document.createElement("div");
   commentSection.classList.add("mt-2", "ms-2", "comment-container");
 
@@ -157,7 +157,7 @@ const createPostModalHTML = (post) => {
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="dynamicPostModalLabel">${post.title}</h5>
+          <h5 class="modal-title" id="dynamicPostModalLabel">${postData.title}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         ${originalPost.outerHTML}
@@ -168,8 +168,8 @@ const createPostModalHTML = (post) => {
   </div>`;
 };
 
-const postCreatedTime = (post) => {
-  const createdDate = new Date(post.created);
+const postCreatedTime = (postData) => {
+  const createdDate = new Date(postData.created);
   const currentTime = new Date();
 
   const timeDifference = currentTime - createdDate;
@@ -183,16 +183,16 @@ const postCreatedTime = (post) => {
   }
 };
 
-const buildPost = (post, displayContainer) => {
-  const feedPost = document.createElement("div");
-  feedPost.classList.add("feed-post", "card", "w-100");
-  createPostInnerHTML(feedPost, post);
-  displayContainer.appendChild(feedPost);
+const buildPost = (postData) => {
+  const postElement = document.createElement("div");
+  postElement.classList.add("feed-post", "card", "w-100");
+  postElement.id = postData.id;
+  createPostInnerHTML(postElement, postData);
 
-  const postComments = feedPost.querySelectorAll(".post-comments");
+  const postComments = postElement.querySelectorAll(".post-comments");
   postComments.forEach((postComment) => {
     postComment.addEventListener("click", async (event) => {
-      postComment.dataset.postId = post.id;
+      postComment.dataset.postId = postData.id;
       const postId = event.currentTarget.dataset.postId;
       const POST_WITH_COMMENTS_URL = `https://v2.api.noroff.dev/social/posts/${postId}?_comments=true&_author=true`;
 
@@ -210,6 +210,8 @@ const buildPost = (post, displayContainer) => {
       dynamicModal.show();
     });
   });
+
+  return postElement;
 };
 
 export default buildPost;
