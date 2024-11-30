@@ -1,6 +1,3 @@
-import { fetchFeedPosts } from "../../feed/handleFeedPosts.mjs";
-import { createPostsHTML } from "../../profile/createProfilePosts.mjs";
-
 const updatePost = async (postId, updatedPost) => {
   const UPDATE_POST_URL = `https://v2.api.noroff.dev/social/posts/${postId}`;
 
@@ -15,11 +12,9 @@ const updatePost = async (postId, updatedPost) => {
       },
     });
     if (response.ok) {
-      if (window.location.pathname === "/src/feed/") {
-        fetchFeedPosts();
-      } else if (window.location.pathname === "/src/profile/") {
-        createPostsHTML();
-      }
+      const data = await response.json();
+      const updatedPostData = data.data;
+      return updatedPostData;
     }
   } catch (error) {
     console.error("Network error:", error);
