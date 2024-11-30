@@ -15,8 +15,6 @@ const fetchFullProfile = async () => {
   const profileTopContainer = document.querySelector(".profile-container");
   const loadingSpinner = document.querySelector(".spinner-container");
 
-  profileTopContainer.style.display = "none";
-
   try {
     const response = await fetch(FETCH_PROFILE_URL, {
       headers: {
