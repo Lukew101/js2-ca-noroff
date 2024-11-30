@@ -1,6 +1,3 @@
-import { fetchFeedPosts } from "../../feed/handleFeedPosts.mjs";
-import { createPostsHTML } from "../../profile/createProfilePosts.mjs";
-
 const deletePost = async (postId, editModal) => {
   const CREATE_POST_URL = `https://v2.api.noroff.dev/social/posts/${postId}`;
 
@@ -13,11 +10,8 @@ const deletePost = async (postId, editModal) => {
       },
     });
     if (response.ok) {
-      if (window.location.pathname === "/src/feed/") {
-        fetchFeedPosts();
-      } else if (window.location.pathname === "/src/profile/") {
-        createPostsHTML();
-      }
+      const post = document.getElementById(postId);
+      post.remove();
       editModal.hide();
     }
   } catch (error) {

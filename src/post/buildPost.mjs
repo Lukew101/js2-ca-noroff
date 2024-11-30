@@ -186,6 +186,7 @@ const postCreatedTime = (post) => {
 const buildPost = (post, displayContainer, createdPost = false) => {
   const feedPost = document.createElement("div");
   feedPost.classList.add("feed-post", "card", "w-100");
+  feedPost.id = post.id;
   createPostInnerHTML(feedPost, post);
 
   if (createdPost) {
