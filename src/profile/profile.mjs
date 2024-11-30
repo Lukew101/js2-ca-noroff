@@ -1,6 +1,10 @@
-import { createPostsHTML } from "./createProfilePosts.mjs";
+import { createProfilePostsHTML } from "./createProfilePosts.mjs";
 import { createTopProfileHTML } from "./createTopProfileHtml.mjs";
-import { createBottomProfileHTML, createBioHTML, createFollowHTML } from "./createBottomProfileHtml.mjs";
+import {
+  createBottomProfileHTML,
+  createBioHTML,
+  createFollowHTML,
+} from "./createBottomProfileHtml.mjs";
 
 const user = JSON.parse(localStorage.getItem("profile"));
 const FETCH_PROFILE_URL = `https://v2.api.noroff.dev/social/profiles/${user.name}?_following=true&_followers=true&`;
@@ -27,7 +31,7 @@ const fetchFullProfile = async () => {
       createBioHTML(profile.data);
       createFollowHTML(profile.data.followers, ".followers-container");
       createFollowHTML(profile.data.following, ".following-container");
-      createPostsHTML();
+      createProfilePostsHTML();
       return profile.data;
     } else {
       throw new Error("Could not fetch profile data.");
@@ -36,7 +40,7 @@ const fetchFullProfile = async () => {
     console.error("Error fetching data:", error);
   } finally {
     profileTopContainer.style.display = "block";
-    loadingSpinner.remove(); 
+    loadingSpinner.remove();
   }
 };
 
