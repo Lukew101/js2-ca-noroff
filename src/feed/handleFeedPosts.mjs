@@ -1,4 +1,5 @@
-import { displayPosts, sortPosts, filterPosts } from "./feedUtils.mjs";
+import { displayPosts, sortPosts, handleInitialFilter, handleObserverFilter } from "./feedUtils.mjs";
+import filterPosts from "../post/http-requests/filterPosts.mjs";
 
 const searchInput = document.querySelector('.form-control[type="search"]');
 const feedSearchForm = document.querySelector(".feed-search-form");
@@ -7,11 +8,15 @@ let posts = [];
 let activeFilteredPosts = [];
 
 let currentPage = 1;
+let currentFilterPage = 1;
 let isSearching = false;
+let isFetching = false;
 let queryValue = "";
 let sortByValue = "";
 
 const fetchFeedPosts = async (page = 1, clearDisplayedPosts = false) => {
+  if (isFetching) return;
+  isFetching = true;
   const feedContainer = document.querySelector(".posts-feed");
   const loadingSpinner = document.createElement("div");
   loadingSpinner.classList.add("spinner-grow");
@@ -50,18 +55,20 @@ const fetchFeedPosts = async (page = 1, clearDisplayedPosts = false) => {
           posts,
           activeFilteredPosts,
           sortByValue,
-          queryValue,
-          displayPosts
+          queryValue
         );
-        activeFilteredPosts = filterPosts(posts, queryValue, displayPosts);
+        activeFilteredPosts = await filterPosts(queryValue);
+        handleInitialFilter(activeFilteredPosts);
       } else {
         displayPosts(posts);
       }
+      currentPage++;
     }
   } catch (error) {
     console.error(error);
   } finally {
     hideLoading();
+    isFetching = false;
   }
 };
 
@@ -72,20 +79,21 @@ if (document.querySelector(".form-select")) {
       posts,
       activeFilteredPosts,
       sortByValue,
-      queryValue,
-      displayPosts
+      queryValue
     );
   });
 }
 
 if (feedSearchForm) {
-  feedSearchForm.addEventListener("submit", (event) => {
+  feedSearchForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const query = searchInput.value.trim();
     if (!query) return;
+    if (query !== queryValue) currentFilterPage = 1;
     queryValue = query;
     isSearching = true;
-    activeFilteredPosts = filterPosts(posts, queryValue, displayPosts);
+    activeFilteredPosts = await filterPosts(queryValue);
+    handleInitialFilter(activeFilteredPosts);
   });
 }
 
@@ -93,6 +101,7 @@ if (feedSearchForm) {
   searchInput.addEventListener("input", () => {
     if (searchInput.value.trim() === "") {
       queryValue = "";
+      currentFilterPage = 1;
       isSearching = false;
       if (sortByValue) {
         activeFilteredPosts = [];
@@ -100,8 +109,7 @@ if (feedSearchForm) {
           posts,
           activeFilteredPosts,
           sortByValue,
-          queryValue,
-          displayPosts
+          queryValue
         );
       } else {
         activeFilteredPosts = [];
@@ -119,8 +127,13 @@ const observer = new IntersectionObserver(
       (!isSearching || activeFilteredPosts.length !== 0)
     ) {
       try {
-        await fetchFeedPosts(currentPage, false);
-        currentPage++;
+        if (queryValue) {
+          currentFilterPage++;
+          const filteredPosts = await filterPosts(queryValue, currentFilterPage);
+          handleObserverFilter(filteredPosts);
+        } else {
+          await fetchFeedPosts(currentPage);
+        }
       } catch (error) {
         console.error("Error fetching posts during scroll:", error);
       }
