@@ -4,6 +4,6 @@
 @import "header";
 
 @import "login";
-@import "feed";
-@import "post";
-@import "profile";
+@import "../feed/feed";
+@import "../post/post";
+@import "../profile/profile";

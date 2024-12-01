@@ -21,6 +21,7 @@ const createPostInnerHTML = (element, postData, isModal = false) => {
   const likes = postData._count.reactions === 1 ? "like" : "likes";
   const comments = postData._count.comments === 1 ? "comment" : "comments";
   const timePostedAgo = postCreatedTime(postData);
+  const isPostImagePresent = postData.media && postData.media.url !== null;
 
   const isAuthor =
     postData.author.email === JSON.parse(localStorage.getItem("profile")).email;
@@ -64,10 +65,13 @@ const createPostInnerHTML = (element, postData, isModal = false) => {
                   <p class="card-text text-start">
                     ${postData.body}
                   </p>
+                  ${
+                    isPostImagePresent
+                      ? `<img class="card-img-bottom mb-2" height="350px" src="${postData.media.url}" alt="${postData.media.alt}"></img>`
+                      : ""
+                  }
                   <div class="d-flex small-grey-text justify-content-between">
-                    <p class="m-0">${
-                      postData._count.reactions
-                    } ${likes}</p>
+                    <p class="m-0">${postData._count.reactions} ${likes}</p>
                     <p class="m-0 pointer post-comments">${
                       postData._count.comments
                     } ${comments}</p>
@@ -106,6 +110,9 @@ const createPostInnerHTML = (element, postData, isModal = false) => {
   if (editButton) {
     editButton.addEventListener("click", () => openEditForm(postData));
   }
+
+  const bottomImage = element.querySelector(".card-img-bottom");
+  if (bottomImage) bottomImage.style.objectFit = "cover";
 
   return element;
 };
