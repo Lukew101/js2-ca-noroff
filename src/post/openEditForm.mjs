@@ -77,7 +77,6 @@ const openEditForm = (postData) => {
       }
 
       const updatedPostElement = buildPost(postData);
-      console.log(updatedPostElement);
       postElement.replaceWith(updatedPostElement);
 
       editModal.hide();

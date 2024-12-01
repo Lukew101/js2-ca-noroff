@@ -10,13 +10,7 @@ export const displayPosts = (posts) => {
   });
 };
 
-export const sortPosts = (
-  posts,
-  activeFilteredPosts,
-  sortBy,
-  queryValue,
-  displayPosts
-) => {
+export const sortPosts = (posts, activeFilteredPosts, sortBy, queryValue) => {
   const sourcePosts =
     activeFilteredPosts.length === 0 && queryValue
       ? []
@@ -40,10 +34,31 @@ export const sortPosts = (
   return sortedPosts;
 };
 
-export const filterPosts = (posts, query, displayPosts) => {
-  const filteredPosts = posts.filter((post) =>
-    post.title.toLowerCase().includes(query.toLowerCase())
-  );
+export const handleInitialFilter = (filteredPosts) => {
   displayPosts(filteredPosts);
-  return filteredPosts;
+};
+
+export const handleObserverFilter = (filteredPosts) => {
+  const feedContainer = document.querySelector(".posts-feed");
+  filteredPosts.forEach((post) => {
+    const postElement = buildPost(post);
+    feedContainer.appendChild(postElement);
+  });
+};
+
+export const toggleLoader = (show) => {
+  const feedContainer = document.querySelector(".posts-feed");
+  let loadingSpinner = document.querySelector(".spinner-grow");
+  if (show) {
+    if (!loadingSpinner) {
+      loadingSpinner = document.createElement("div");
+      loadingSpinner.classList.add("spinner-grow");
+      loadingSpinner.setAttribute("role", "status");
+      feedContainer.appendChild(loadingSpinner);
+    }
+  } else {
+    if (loadingSpinner) {
+      loadingSpinner.remove();
+    }
+  }
 };
