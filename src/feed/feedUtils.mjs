@@ -45,3 +45,20 @@ export const handleObserverFilter = (filteredPosts) => {
     feedContainer.appendChild(postElement);
   });
 };
+
+export const toggleLoader = (show) => {
+  const feedContainer = document.querySelector(".posts-feed");
+  let loadingSpinner = document.querySelector(".spinner-grow");
+  if (show) {
+    if (!loadingSpinner) {
+      loadingSpinner = document.createElement("div");
+      loadingSpinner.classList.add("spinner-grow");
+      loadingSpinner.setAttribute("role", "status");
+      feedContainer.appendChild(loadingSpinner);
+    }
+  } else {
+    if (loadingSpinner) {
+      loadingSpinner.remove();
+    }
+  }
+};

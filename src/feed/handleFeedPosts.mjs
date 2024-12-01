@@ -1,4 +1,4 @@
-import { displayPosts, sortPosts, handleInitialFilter, handleObserverFilter } from "./feedUtils.mjs";
+import { displayPosts, sortPosts, handleInitialFilter, handleObserverFilter, toggleLoader } from "./feedUtils.mjs";
 import filterPosts from "../post/http-requests/filterPosts.mjs";
 
 const searchInput = document.querySelector('.form-control[type="search"]');
@@ -17,16 +17,8 @@ let sortByValue = "";
 const fetchFeedPosts = async (page = 1, clearDisplayedPosts = false) => {
   if (isFetching) return;
   isFetching = true;
-  const feedContainer = document.querySelector(".posts-feed");
-  const loadingSpinner = document.createElement("div");
-  loadingSpinner.classList.add("spinner-grow");
-  loadingSpinner.setAttribute("role", "status");
-
-  const showLoading = () => feedContainer.appendChild(loadingSpinner);
-  const hideLoading = () => loadingSpinner.remove();
 
   try {
-    showLoading();
     const response = await fetch(
       `https://v2.api.noroff.dev/social/posts?limit=20&page=${page}&_author=true`,
       {
@@ -67,7 +59,6 @@ const fetchFeedPosts = async (page = 1, clearDisplayedPosts = false) => {
   } catch (error) {
     console.error(error);
   } finally {
-    hideLoading();
     isFetching = false;
   }
 };
@@ -127,6 +118,7 @@ const observer = new IntersectionObserver(
       (!isSearching || activeFilteredPosts.length !== 0)
     ) {
       try {
+        toggleLoader(true);
         if (queryValue) {
           currentFilterPage++;
           const filteredPosts = await filterPosts(queryValue, currentFilterPage);
@@ -136,6 +128,8 @@ const observer = new IntersectionObserver(
         }
       } catch (error) {
         console.error("Error fetching posts during scroll:", error);
+      } finally {
+        toggleLoader(false);
       }
     }
   },
