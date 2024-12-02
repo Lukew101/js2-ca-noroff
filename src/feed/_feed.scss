@@ -1,5 +1,6 @@
 .feed-post,
-.feed-create-post {
+.feed-create-post,
+.feed-search-filter-wrapper {
   max-width: 600px;
   width: 100vw;
 }
@@ -13,4 +14,9 @@
 
 .trending-feed-post {
   width: 100vw;
+}
+
+.feed-search-form,
+.feed-sortby-select {
+  max-width: 400px;
 }

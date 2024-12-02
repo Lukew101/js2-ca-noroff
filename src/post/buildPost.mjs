@@ -67,7 +67,7 @@ const createPostInnerHTML = (element, postData, isModal = false) => {
                   </p>
                   ${
                     isPostImagePresent
-                      ? `<img class="card-img-bottom mb-2" height="350px" src="${postData.media.url}" alt="${postData.media.alt}"></img>`
+                      ? `<img class="card-img-bottom mb-2" height="${isModal ? '450px' : '400px'}" src="${postData.media.url}" alt="${postData.media.alt}"></img>`
                       : ""
                   }
                   <div class="d-flex small-grey-text justify-content-between">
