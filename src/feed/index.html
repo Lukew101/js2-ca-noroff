@@ -14,7 +14,7 @@
     ></script>
   </head>
   <body>
-    <header class="d-flex sticky-top pe-2 align-items-center">
+    <header class="d-flex sticky-top pe-2">
       <nav class="navbar navbar-expand-lg navbar-dark bg-body-tertiary w-100">
         <div class="container-fluid">
           <a class="navbar-brand" href="/src/feed/">
@@ -49,13 +49,15 @@
           </div>
         </div>
       </nav>
-      <a href="../profile/">
-        <img
-          width="45"
-          height="45"
-          class="rounded-circle profile-pic bg-white border border-1 border-light"
-        />
-      </a>
+      <div class="d-flex align-items-center header-profile-pic">
+        <a href="../profile/">
+          <img
+            width="45"
+            height="45"
+            class="rounded-circle profile-pic bg-white border border-1 border-light"
+          />
+        </a>
+      </div>
     </header>
     <main class="feed-main py-4">
       <div class="container text-center">
@@ -116,7 +118,10 @@
                   Search
                 </button>
               </form>
-              <select class="form-select w-auto feed-sortby-select" aria-label="Sort by">
+              <select
+                class="form-select w-auto feed-sortby-select"
+                aria-label="Sort by"
+              >
                 <option selected>Sort by</option>
                 <option value="Most popular">Most popular</option>
                 <option value="Newest">Newest</option>
