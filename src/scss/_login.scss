@@ -1,0 +1,41 @@
+.login-form {
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+#loginButton {
+  background-color: $primary-color;
+  color: white;
+}
+
+#registerButton {
+  background-color: $secondary-color;
+  color: white;
+}
+
+#loginButton:hover {
+  background-color: darken($primary-color, 10%);
+}
+
+#registerButton:hover {
+  background-color: darken($secondary-color, 10%);
+}
+
+.redirect-link {
+  color: lighten($primary-color, 20%);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.redirect-link:hover {
+  color: lighten($primary-color, 10%);
+}
+
+.password-invalid-feedback {
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: var(--bs-form-invalid-color);
+}

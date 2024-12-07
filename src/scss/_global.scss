@@ -1,0 +1,42 @@
+.feed-main,
+.profile-main {
+  background-color: $tertiary-color;
+  min-height: 100vh;
+}
+
+.small-grey-text {
+  color: #8e8e8e;
+  font-size: 14px;
+}
+
+.white-outer-border {
+  box-shadow: 0 0 0 4px white;
+}
+
+.pointer,
+.create-post-icons > svg {
+  cursor: pointer;
+}
+
+#postButton,
+#searchButton {
+  background-color: $secondary-color;
+  color: white;
+}
+
+#searchButton {
+  color: $secondary-color;
+}
+
+.custom-negative-margin {
+  margin-top: -100px;
+}
+
+.spinner-grow {
+  width: 100px;
+  height: 100px;
+}
+
+.header-profile-pic {
+  max-height: 106px;
+}

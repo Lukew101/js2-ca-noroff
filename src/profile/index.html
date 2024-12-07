@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Profile Page for Rowan Atkinson" />
+    <link href="../../dist/css/index.css" rel="stylesheet" />
+    <link rel="icon" href="../util/favicon-32x32.png" type="image/png" />
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <header class="d-flex sticky-top pe-2 align-items-center">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-body-tertiary w-100">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="../feed/">
+            <img
+              src="../util/logo/logo-color.png"
+              alt="Bootstrap"
+              width="80"
+              height="80"
+            />
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav ms-auto">
+              <a class="nav-link active fs-5" href="../profile/"
+                >Profile</a
+              >
+              <a
+                class="nav-link fs-5"
+                aria-current="page"
+                href="../feed/"
+                >Feed</a
+              >
+            </div>
+          </div>
+        </div>
+      </nav>
+      <a href="../profile/">
+        <img
+          width="45"
+          height="45"
+          class="rounded-circle profile-pic bg-white border border-1 border-light"
+        />
+      </a>
+    </header>
+    <main class="profile-main">
+      <div class="container pt-5 gap-5 profile-container"></div>
+      <div class="spinner-container">
+        <div class="spinner-grow" role="status"></div>
+      </div>
+    </main>
+    <script src="../../script.js"></script>
+    <script src="./profile.mjs" type="module"></script>
+  </body>
+</html>

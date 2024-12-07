@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Weave Login Page" />
+    <link href="dist/css/index.css" rel="stylesheet" />
+    <link rel="icon" href="/src/util/favicon-32x32.png" type="image/png" />
+    <title>Weave | Login</title>
+    <script src="handleRedirection.js"></script>
+  </head>
+  <body>
+    <main
+      class="d-flex justify-content-center align-items-center vh-100 bg-light"
+    >
+      <section class="login-form p-5 rounded bg-white m-2">
+        <form id="loginForm">
+          <h1 class="fw-bolder text-center mb-4 header-title">Weave</h1>
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control"
+              id="floatingEmail"
+              placeholder=""
+              required
+            />
+            <label for="floatingEmail">Email address</label>
+          </div>
+          <div class="form-floating">
+            <input
+              type="password"
+              class="form-control"
+              id="floatingPassword"
+              placeholder=""
+              required
+              minlength="8"
+            />
+            <label for="floatingPassword">Password</label>
+            <div class="password-invalid-feedback"></div>
+          </div>
+          <div class="error-response-display mt-3" role="alert"></div>
+          <button
+            type="submit"
+            class="btn btn-custom w-100"
+            id="loginButton"
+          >
+            Login
+          </button>
+        </form>
+        <div
+          class="d-flex align-items-center border-bottom border-dark-subtle mx-4 my-3"
+        ></div> 
+        <div class="d-flex flex-column align-items-center">
+          <button type="button" class="btn btn-custom w-50" id="registerButton">
+            Register
+          </button>
+        </div>
+      </section>
+    </main>
+    <script src="/auth.mjs" type="module"></script>
+  </body>
+</html>
