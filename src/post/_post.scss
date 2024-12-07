@@ -8,8 +8,8 @@
 }
 
 .comment-bubble {
-  background-color: #f0f0f0;      
-  color: #333;                    
+  background-color: #f0f0f0;
+  color: #333;
   padding: 10px 15px;
   border-radius: 15px;
   max-width: 80%;
@@ -23,3 +23,28 @@
   overflow-y: auto;
 }
 
+.error-message {
+  position: absolute;
+  bottom: 22%;
+  left: 10%;
+  width: 80%;
+  text-align: center;
+  z-index: 1000;
+  margin-bottom: 0;
+  text-align: left;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.alert {
+  --bs-alert-padding-y: 0;
+}
+
+@media (min-width: 576px) {
+  .error-message {
+    bottom: 28%;
+  }
+  .alert {
+    --bs-alert-padding-y: 0.2rem;
+  }
+}

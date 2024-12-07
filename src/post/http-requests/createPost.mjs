@@ -7,10 +7,19 @@ const createPost = async (event) => {
   event.preventDefault();
   const title = document.querySelector("#postTitle").value;
   const body = document.querySelector("#postContent").value;
+  const imageUrl = document.querySelector("#postImageUrl").value;
+  const imageAlt = document.querySelector("#postImageAlt").value;
   const CREATE_POST_URL = "https://v2.api.noroff.dev/social/posts?_author=true";
 
   try {
-    const requestData = { title, body };
+    let requestData;
+    let media;
+    if ((imageUrl && !imageAlt) || (!imageUrl && imageAlt)) {
+      throw new Error("Must provide image url & description together");
+    } else {
+      media = { url: imageUrl, alt: imageAlt };
+    }
+    imageUrl && imageAlt ? (requestData = { title, body, media }) : (requestData = { title, body });
     const response = await fetch(CREATE_POST_URL, {
       method: "POST",
       body: JSON.stringify(requestData),
@@ -29,7 +38,15 @@ const createPost = async (event) => {
       return postElement;
     }
   } catch (error) {
-    console.error("Network error:", error);
+    const wrapperContainer = document.querySelector(".create-post-inputs-wrapper");
+    const errorElement = document.createElement("p");
+    errorElement.innerHTML = error.message;
+    errorElement.classList.add("error-message", "alert", "alert-danger");
+    wrapperContainer.appendChild(errorElement);
+
+    setTimeout(() => {
+      wrapperContainer.removeChild(errorElement);
+    }, 6000);
   }
 };
 
