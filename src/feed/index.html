@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Weave Feed for Rowan Atkinson" />
+    <link href="../../dist/css/index.css" rel="stylesheet" />
+    <link rel="icon" href="../util/favicon-32x32.png" type="image/png" />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header class="d-flex sticky-top pe-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-body-tertiary w-100">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/src/feed/">
+            <img
+              src="../util/logo/logo-color.png"
+              alt="Weave logo"
+              width="80"
+              height="80"
+            />
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav ms-auto">
+              <a class="nav-link fs-5" href="../profile/">Profile</a>
+              <a
+                class="nav-link active fs-5"
+                aria-current="page"
+                href="../feed/"
+                >Feed</a
+              >
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div class="d-flex align-items-center header-profile-pic">
+        <a href="../profile/">
+          <img
+            width="45"
+            height="45"
+            class="rounded-circle profile-pic bg-white border border-1 border-light"
+          />
+        </a>
+      </div>
+    </header>
+    <main class="feed-main py-4">
+      <div class="container text-center">
+        <div class="row mx-2 justify-content-center">
+          <section class="d-flex flex-column align-items-center gap-3">
+            <div class="card w-100 mb- feed-create-post">
+              <div class="card-body">
+                <form id="createPostForm">
+                  <div class="mb-5 d-flex align-items-center post-inputs-wrapper">
+                    <img
+                      width="45"
+                      height="45"
+                      class="rounded-circle profile-pic bg-white border border-1 border-light me-1"
+                    />
+                    <div class="w-100 d-flex flex-column gap-2 create-post-inputs-wrapper">
+                      <input
+                        type="text"
+                        class="form-control w-100"
+                        id="postTitle"
+                        placeholder="Post title"
+                        required
+                      />
+                      <textarea
+                        class="form-control"
+                        id="postContent"
+                        rows="3"
+                        placeholder="Post description"
+                        required
+                      ></textarea>
+                      <div class="d-flex flex-column gap-2 flex-sm-row mb-2">
+                        <input
+                        type="text"
+                        class="form-control w-100"
+                        id="postImageUrl"
+                        placeholder="Image URL"
+                      />
+                      <input
+                        type="text"
+                        class="form-control w-100"
+                        id="postImageAlt"
+                        placeholder="Image description"
+                      />
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="d-flex align-items-center border-bottom border-dark-subtle mx-4 my-3"
+                  ></div>
+                  <div class="d-flex justify-content-end mx-4">
+                    <button
+                      type="submit"
+                      class="btn btn-custom btn-lg"
+                      id="postButton"
+                    >
+                      Post
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div
+              class="d-flex flex-column flex-sm-row gap-3 justify-content-center w-100 align-items-center feed-search-filter-wrapper"
+            >
+              <form class="d-flex w-100 gap-2 feed-search-form">
+                <input
+                  class="form-control mr-sm-2 w-100"
+                  type="search"
+                  placeholder="Search titles & descriptions..."
+                  aria-label="Search"
+                />
+                <button class="btn btn-dark btn-lg" type="submit">
+                  Search
+                </button>
+              </form>
+              <select
+                class="form-select w-auto feed-sortby-select"
+                aria-label="Sort by"
+              >
+                <option selected>Sort by</option>
+                <option value="Most popular">Most popular</option>
+                <option value="Newest">Newest</option>
+                <option value="Oldest">Oldest</option>
+              </select>
+            </div>
+            <div
+              class="d-flex flex-column align-items-center gap-3 w-100 posts-feed"
+            ></div>
+            <div id="sentinel"></div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <script src="/src/feed/feed.mjs" type="module"></script>
+    <script src="../../script.js"></script>
+  </body>
+</html>
