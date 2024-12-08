@@ -67,7 +67,11 @@ const createPostInnerHTML = (element, postData, isModal = false) => {
                   </p>
                   ${
                     isPostImagePresent
-                      ? `<img class="card-img-bottom mb-2" height="${isModal ? '450px' : '400px'}" src="${postData.media.url}" alt="${postData.media.alt}"></img>`
+                      ? `<img class="card-img-bottom mb-2" height="${
+                          isModal ? "450px" : "400px"
+                        }" src="${postData.media.url}" alt="${
+                          postData.media.alt
+                        }"></img>`
                       : ""
                   }
                   <div class="d-flex small-grey-text justify-content-between">
@@ -183,10 +187,17 @@ const postCreatedTime = (postData) => {
   const timeDifferenceInMinutes = timeDifference / (1000 * 60);
 
   if (timeDifferenceInMinutes < 60) {
-    return `${Math.floor(timeDifferenceInMinutes)} minutes ago`;
+    const minutes = Math.floor(timeDifferenceInMinutes);
+    return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
+  } else if (timeDifferenceInMinutes < 60 * 24) {
+    const hours = Math.floor(timeDifferenceInMinutes / 60);
+    return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
+  } else if (timeDifferenceInMinutes < 60 * 24 * 7) {
+    const days = Math.floor(timeDifferenceInMinutes / (60 * 24));
+    return `${days} day${days !== 1 ? "s" : ""} ago`;
   } else {
-    const timeDifferenceInHours = timeDifferenceInMinutes / 60;
-    return `${Math.floor(timeDifferenceInHours)} hours ago`;
+    const weeks = Math.floor(timeDifferenceInMinutes / (60 * 24 * 7));
+    return `${weeks} week${weeks !== 1 ? "s" : ""} ago`;
   }
 };
 
