@@ -1,8 +1,7 @@
 import { validateSignupFormData } from "../util/forms/formValidation.mjs";
 import login from "../util/forms/login.mjs";
 
-const API_AUTH_URL = "https://v2.api.noroff.dev/auth";
-const API_REGISTER_URL = `${API_AUTH_URL}/register`;
+const API_REGISTER_URL = "https://v2.api.noroff.dev/auth/register";
 
 const signupForm = document.querySelector("#signupForm");
 
@@ -11,24 +10,31 @@ document.addEventListener("DOMContentLoaded", function () {
     const name = document.querySelector("#floatingName").value.trim();
     const email = document.querySelector("#floatingEmail").value.trim();
     const password = document.querySelector("#floatingPassword").value;
-    const confirmPassword = document.querySelector("#floatingConfirmPassword").value;
+    const confirmPassword = document.querySelector(
+      "#floatingConfirmPassword"
+    ).value;
 
     const isFormValid = signupForm.checkValidity();
-    const isCustomValidationValid = validateSignupFormData(name, email, password, confirmPassword);
+    const isCustomValidationValid = validateSignupFormData(
+      name,
+      email,
+      password,
+      confirmPassword
+    );
 
     if (!isFormValid || !isCustomValidationValid) {
-      event.preventDefault(); 
+      event.preventDefault();
     } else {
       const requestData = { name, email, password };
       registerUser(requestData);
-      event.preventDefault(); 
+      event.preventDefault();
     }
   });
 });
 
 const registerUser = async (requestData) => {
   try {
-    const { name, email, password } = requestData; 
+    const { name, email, password } = requestData;
     const response = await fetch(API_REGISTER_URL, {
       method: "POST",
       headers: {
@@ -40,7 +46,9 @@ const registerUser = async (requestData) => {
       const loginRequestData = { email, password };
       login(loginRequestData);
     } else {
-      const errorResponseDisplay = document.querySelector(".error-response-display");
+      const errorResponseDisplay = document.querySelector(
+        ".error-response-display"
+      );
       const errorData = await response.json();
       errorResponseDisplay.innerHTML = errorData.errors[0].message;
       errorResponseDisplay.classList.add("alert", "alert-danger");

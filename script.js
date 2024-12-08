@@ -23,12 +23,18 @@ function displayProfilePicture() {
   const profile = JSON.parse(localStorage.getItem("profile"));
   const defaultAvatar = {
     url: "./src/util/pictures/default-user.png",
-    alt: "Default Profile Picture"
+    alt: "Default Profile Picture",
   };
 
   profilePicture.forEach((pic) => {
-    pic.src = profile && profile.avatar && profile.avatar.url ? profile.avatar.url : defaultAvatar.url;
-    pic.alt = profile && profile.avatar && profile.avatar.alt ? profile.avatar.alt : defaultAvatar.alt;
+    pic.src =
+      profile && profile.avatar && profile.avatar.url
+        ? profile.avatar.url
+        : defaultAvatar.url;
+    pic.alt =
+      profile && profile.avatar && profile.avatar.alt
+        ? profile.avatar.alt
+        : defaultAvatar.alt;
   });
 }
 

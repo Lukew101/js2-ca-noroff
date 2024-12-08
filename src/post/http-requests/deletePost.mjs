@@ -1,10 +1,10 @@
 import { posts } from "../../feed/handleFeedPosts.mjs";
 
 const deletePost = async (postId, editModal) => {
-  const CREATE_POST_URL = `https://v2.api.noroff.dev/social/posts/${postId}`;
+  const DELETE_POST_URL = `https://v2.api.noroff.dev/social/posts/${postId}`;
 
   try {
-    const response = await fetch(CREATE_POST_URL, {
+    const response = await fetch(DELETE_POST_URL, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,

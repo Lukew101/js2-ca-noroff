@@ -19,7 +19,9 @@ const createPost = async (event) => {
     } else {
       media = { url: imageUrl, alt: imageAlt };
     }
-    imageUrl && imageAlt ? (requestData = { title, body, media }) : (requestData = { title, body });
+    imageUrl && imageAlt
+      ? (requestData = { title, body, media })
+      : (requestData = { title, body });
     const response = await fetch(CREATE_POST_URL, {
       method: "POST",
       body: JSON.stringify(requestData),
@@ -38,7 +40,9 @@ const createPost = async (event) => {
       return postElement;
     }
   } catch (error) {
-    const wrapperContainer = document.querySelector(".create-post-inputs-wrapper");
+    const wrapperContainer = document.querySelector(
+      ".create-post-inputs-wrapper"
+    );
     const errorElement = document.createElement("p");
     errorElement.innerHTML = error.message;
     errorElement.classList.add("error-message", "alert", "alert-danger");

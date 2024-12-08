@@ -11,9 +11,9 @@
  * // Expect singular post to be returned with the Post model, comments and author
  * ```
  */
-const getPost = async (fetchURL) => {
+const getPost = async (fetchPostURL) => {
   try {
-    const response = await fetch(fetchURL, {
+    const response = await fetch(fetchPostURL, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "X-Noroff-API-Key": "51c023ca-d672-4f25-b71a-0c5e1489b5f9",

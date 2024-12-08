@@ -1,5 +1,4 @@
-const API_AUTH_URL = "https://v2.api.noroff.dev/auth";
-const API_LOGIN_URL = `${API_AUTH_URL}/login`;
+const API_LOGIN_URL = "https://v2.api.noroff.dev/auth/login";
 
 const saveToLocalStorage = (key, tokenValue) => {
   localStorage.setItem(key, tokenValue);
@@ -21,7 +20,9 @@ const login = async (requestData) => {
       saveToLocalStorage("profile", JSON.stringify(profile));
       window.location.href = "/src/feed/";
     } else {
-      const errorResponseDisplay = document.querySelector(".error-response-display");
+      const errorResponseDisplay = document.querySelector(
+        ".error-response-display"
+      );
       const errorData = await response.json();
       errorResponseDisplay.innerHTML = errorData.errors[0].message;
       errorResponseDisplay.classList.add("alert", "alert-danger");
